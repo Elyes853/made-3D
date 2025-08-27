@@ -1,0 +1,31 @@
+<div class="carousel">
+  <div class="carousel-inner"
+       [style.transform]="'translateX(-' + currentIndex * 100 + '%)'"
+       (touchstart)="onTouchStart($event)"
+       (touchend)="onTouchEnd($event)"
+       (mousedown)="onMouseDown($event)"
+       (mouseup)="onMouseUp($event)">
+
+    <div class="carousel-item" *ngFor="let item of items; let i = index">
+      <div class="carousel-content">
+        <div class="carousel-text">
+          <h3>{{ item.subtitle }}</h3>
+          <h1>{{ item.title }}</h1>
+          <p>{{ item.description }}</p>
+          <button>{{ item.buttonText }}</button>
+        </div>
+        <div class="carousel-image">
+          <img [src]="item.image" alt="Product {{ i }}">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dots -->
+  <div class="dots">
+    <span *ngFor="let item of items; let i = index"
+          [class.active]="i === currentIndex"
+          (click)="goToSlide(i)">
+    </span>
+  </div>
+</div>

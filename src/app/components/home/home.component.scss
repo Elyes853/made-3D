@@ -1,0 +1,109 @@
+
+.video-container {
+  position: relative;
+  width: 100%;
+  height: 100vh; /* Fullscreen */
+  overflow: hidden;
+}
+
+.video-container video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  transform: translate(-50%, -50%);
+  object-fit: cover; /* Keeps aspect ratio */
+  z-index: 0;
+}
+
+/* Dark overlay */
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* Adjust darkness */
+  z-index: 1;
+}
+
+/* Content on top */
+.content {
+  position: relative;
+  z-index: 2;
+  color: #fff;
+  text-align: center;
+  top: 40%;
+}
+
+.content h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.content p {
+  font-size: 1.5rem;
+}
+
+/* Responsive text */
+@media (max-width: 768px) {
+  .content h1 {
+    font-size: 2rem;
+  }
+  .content p {
+    font-size: 1rem;
+  }
+}
+
+
+.content p {
+  font-size: 1.5rem;
+}
+
+/* Responsive text */
+@media (max-width: 768px) {
+  .content h1 {
+    font-size: 2rem;
+  }
+  .content p {
+    font-size: 1rem;
+  }
+}
+
+
+/* Button style */
+.glass-btn {
+  padding: 12px 32px;
+  margin: 20px 0px;
+  border: solid white;
+  border-radius: 50px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+/* Hover effect */
+.glass-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .glass-btn {
+    padding: 10px 24px;
+    font-size: 1rem;
+  }
+}
+
+
