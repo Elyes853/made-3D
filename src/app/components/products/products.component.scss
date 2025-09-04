@@ -1,4 +1,5 @@
 .carousel {
+  margin-top: 30px;
   position: relative;
   overflow: hidden;
   width: 100%;
@@ -71,7 +72,9 @@
 .carousel-image img {
   width: 100%;
   max-width: 450px;
-  object-fit: contain;
+  max-height: 300px;
+  object-fit: cover; /* crop instead of shrink */
+
 }
 
 .dots {
@@ -123,3 +126,59 @@
     max-width: 300px;
   }
 }
+
+
+
+
+
+
+
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, max-content));
+  gap: 1.5rem;
+  padding: 4rem;
+  background: #f8f9fa;
+
+  justify-content: center; /* centers the whole grid */
+}
+
+
+/* ✅ Tablet (≥600px and ≤900px) → exactly 2 items per row */
+@media (max-width: 900px) and (min-width: 600px) {
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ✅ Small phones (<600px) → still 2 items per row */
+@media (max-width: 600px) {
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.8rem;
+    padding: 0.8rem;
+  }
+
+  .product-card {
+    font-size: 0.85rem;   /* make text smaller */
+  }
+
+  .buy-btn {
+    padding: 0.4rem 0.8rem;  /* smaller button */
+    font-size: 0.8rem;
+  }
+}
+
+/* Large screens */
+@media (min-width: 1200px) {
+  .product-grid {
+    grid-template-columns: repeat(auto-fit, minmax(260px, max-content));
+    gap: 3rem; /* more spacing */
+    padding: 3rem;
+  }
+}
+
+
+
+

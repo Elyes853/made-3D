@@ -1,73 +1,260 @@
+//
+///* Navbar base */
+//
+// *{
+//   font-family: Arial;
+//   font-size:18px;
+// }
+///* Navbar */
+//.navbar {
+//  display: flex;
+//  justify-content: center;
+//  align-items: center;
+//  background: #fff;
+//  padding: 0.5rem 1rem;
+//  color: black;
+//  position: relative;
+//  z-index: 20; /* below side menu */
+//}
+//
+///* Left side icons */
+//.nav-left {
+//  display: flex;
+//  gap: 2rem;
+//}
+//
+//button.cart-icon-btn{
+//  display: flex;
+//  align-items: center;
+//}
+//
+//button.cart-icon-btn img{
+//  margin-right: 5px
+//}
+//
+//.nav-links.desktop a {
+//  color: black;
+//  text-decoration: none;
+//}
+//
+//.nav-links.desktop {
+//  display: flex;
+//  gap: 1rem;
+//
+//}
+//
+///* Buttons for search/cart */
+//.icon-btn {
+//  background: none;
+//  border: none;
+//  padding: 0;
+//  cursor: pointer;
+//}
+//
+//.icon-btn img {
+//  height: 24px;
+//  width: 24px;
+//}
+//
+///* Center logo */
+//.logo {
+//  flex: 1; /* take available space to center the logo */
+//  display: flex;
+//  justify-content: center;
+//  padding-left: -40px;
+//  margin-right: 5%;
+//}
+//
+//.logo img {
+//  height: 40px; /* adjust as needed */
+//  width: auto;
+//  display: block;
+//
+//}
+//
+///* Hamburger */
+//.hamburger {
+//  display: flex;
+//  flex-direction: column;
+//  gap: 5px;
+//  cursor: pointer;
+//}
+//
+//.hamburger span {
+//  width: 25px;
+//  height: 3px;
+//  background: black;
+//  transition: all 0.3s;
+//}
+//
+///* Side menu */
+//.side-menu {
+//  position: fixed;
+//  top: 0;
+//  left: -500px;
+//  width: 300px;
+//  height: 100%;
+//  background: #fff;
+//  display: flex;
+//  flex-direction: column;
+//  padding-top: 2rem;
+//  padding-left: 2rem;
+//  transition: left 0.4s ease;
+//  z-index: 30;
+//}
+//
+//.side-menu.open {
+//  left: 0;
+//}
+//
+//.side-menu a {
+//  color: black;
+//  text-decoration: none;
+//  padding: 1rem;
+//  transition: background 0.2s;
+//}
+//
+//.side-menu a:hover {
+//  background: #444;
+//}
+//
+//.side-menu.open {
+//  left: 0;
+//}
+//
+//
+///* Overlay */
+//.overlay {
+//  position: fixed;
+//  top: 0;
+//  left: 0;
+//  width: 100%;
+//  height: 100%;
+//  background: rgba(0,0,0,0.5);
+//  z-index: 28;
+//}
+//
+///* Hide desktop menu and left icons on desktop, only show hamburger on mobile */
+//@media (max-width: 768px) {
+//  .nav-links.desktop {
+//    display: none;
+//  }
+//}
+//
+//@media (min-width: 769px) {
+//  .hamburger {
+//    display: none;
+//  }
+//  .logo {
+//    flex: 0;
+//    justify-content: flex-start;
+//    margin-left: 2.5rem;
+//  }
+//}
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
 
+/* Global reset */
+* {
+  font-family: Arial, sans-serif;
+  font-size: 18px;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
-
-
-
-/* Navbar base */
-
- *{
-   font-family: Arial;
-   font-size:18px;
- }
 /* Navbar */
 .navbar {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  background: #fff;
-  padding: 0.5rem 1rem;
-  color: black;
-  position: relative;
-  z-index: 20; /* below side menu */
+  background: #ffffff;
+  padding: 0.75rem 1.5rem;
+  color: #111;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  border-bottom: 1px solid #e5e5e5;
 }
 
-/* Left side icons */
+/* Left section */
 .nav-left {
   display: flex;
-  gap: 2rem;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+button.cart-icon-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+button.cart-icon-btn img {
+  height: 22px;
+  width: 22px;
+}
+
+/* Desktop nav links */
+.nav-links.desktop {
+  display: flex;
+  gap: 1.5rem;
 }
 
 .nav-links.desktop a {
-  color: black;
+  color: #111;
   text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
 }
 
-.nav-links.desktop {
-  display: flex;
-  gap: 1rem;
-
+.nav-links.desktop a:hover,
+.side-menu a:hover {
+  color: #0070f3; /* accent hover color */
 }
 
 /* Buttons for search/cart */
 .icon-btn {
   background: none;
   border: none;
-  padding: 0;
+  padding: 6px 0;
   cursor: pointer;
+  border-radius: 50%;
+  transition: background 0.2s ease;
+}
+
+.icon-btn:hover {
+  background: rgba(0,0,0,0.05);
 }
 
 .icon-btn img {
-  height: 24px;
-  width: 24px;
+  height: 22px;
+  width: 22px;
 }
 
-/* Center logo */
+/* Logo */
 .logo {
-  flex: 1; /* take available space to center the logo */
+  flex: 1;
   display: flex;
   justify-content: center;
-  padding-left: -40px;
-  margin-right: 5%;
 }
 
 .logo img {
-  height: 40px; /* adjust as needed */
+  height: 42px;
   width: auto;
   display: block;
-
 }
 
 /* Hamburger */
@@ -79,26 +266,27 @@
 }
 
 .hamburger span {
-  width: 25px;
+  width: 26px;
   height: 3px;
   background: black;
-  transition: all 0.3s;
+  border-radius: 2px;
+  transition: all 0.3s ease;
 }
 
 /* Side menu */
 .side-menu {
   position: fixed;
   top: 0;
-  left: -500px;
-  width: 300px;
+  left: -320px;
+  width: 260px;
   height: 100%;
-  background: #fff;
+  background: #ffffff;
   display: flex;
   flex-direction: column;
-  padding-top: 2rem;
-  padding-left: 2rem;
-  transition: left 0.4s ease;
-  z-index: 30;
+  padding: 2rem 1.5rem;
+  transition: left 0.35s ease;
+  z-index: 60;
+  border-right: 1px solid #e5e5e5;
 }
 
 .side-menu.open {
@@ -106,36 +294,85 @@
 }
 
 .side-menu a {
-  color: black;
+  color: #111;
   text-decoration: none;
-  padding: 1rem;
-  transition: background 0.2s;
+  font-weight: 500;
+  padding: 0.75rem 0;
+  transition: color 0.2s ease;
 }
-
-.side-menu a:hover {
-  background: #444;
-}
-
-.side-menu.open {
-  left: 0;
-}
-
 
 /* Overlay */
 .overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.5);
-  z-index: 28;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 55;
 }
 
-/* Hide desktop menu and left icons on desktop, only show hamburger on mobile */
+
+
+/* Navbar */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #ffffff;
+  padding: 0.75rem 1.5rem;
+  color: #111;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  border-bottom: 1px solid #e5e5e5;
+  margin: 0 20px;
+}
+
+/* Center logo always */
+.logo {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.logo img {
+  height: 42px;
+  width: auto;
+  display: block;
+}
+
+/* Left section */
+.nav-left {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+/* Desktop nav links */
+.nav-links.desktop {
+  display: flex;
+  gap: 2rem;
+}
+
+/* Keep hamburger aligned right */
+.hamburger {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+}
+
+
+/* Responsive */
 @media (max-width: 768px) {
   .nav-links.desktop {
     display: none;
+  }
+
+  .logo {
+    justify-content: center;
+  }
+
+  .navbar{
+    margin: 0px;
   }
 }
 
@@ -143,16 +380,11 @@
   .hamburger {
     display: none;
   }
+
   .logo {
     flex: 0;
+    margin-left: 2rem;
     justify-content: flex-start;
-    margin-left: 2.5rem;
   }
 }
-
-
-
-
-
-
 

@@ -1,21 +1,20 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { interval, Subscription } from 'rxjs';
+import { Product } from '../../models/product.model';
 import {NgFor, NgStyle} from "@angular/common";
+import {Router, RouterLink} from "@angular/router";
+import {ProductComponent} from "../product/product.component";
+import {carouselItems, PRODUCTS} from "../../data/products";
 
-interface Product {
-  image: string;
-  category: string;
-  title: string;
-  description: string;
-  price: string;
-}
 
 @Component({
   selector: 'app-products',
   standalone: true,
   imports: [
     NgStyle,
-    NgFor
+    NgFor,
+    ProductComponent,
+    RouterLink,
   ],
   templateUrl: './products.component.html',
   styleUrl: './products.component.scss'
@@ -23,16 +22,20 @@ interface Product {
 
 
 export class ProductsComponent implements OnInit, OnDestroy {
-  items = [
-    { image: 'assets/images/chair1.png', subtitle: 'Summer Big Sale!', title: 'Up To 70% Off', description: 'ArmChair Brands.', buttonText: 'Shopping Now' },
-    { image: 'assets/chair2.png', subtitle: 'New Collection', title: 'Modern Chairs', description: 'Comfortable and stylish.', buttonText: 'Discover' },
-    { image: 'assets/chair3.png', subtitle: 'Special Discount', title: 'Buy 1 Get 1 Free', description: 'Limited time offer.', buttonText: 'Grab Now' }
-  ];
+
+  constructor(private router: Router) {}
+
+  // -------------------------------
+  // CAROUSEL DATA
+  // -------------------------------
+
+
+  items = carouselItems
 
   currentIndex = 0;
   interval: any;
 
-  // for swipe
+  // swipe handling
   startX = 0;
   isDragging = false;
 
@@ -45,7 +48,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
   }
 
   startAutoSlide() {
-    this.interval = setInterval(() => this.nextSlide(), 3000);
+    this.interval = setInterval(() => this.nextSlide(), 5000);
   }
 
   nextSlide() {
@@ -60,13 +63,10 @@ export class ProductsComponent implements OnInit, OnDestroy {
     this.currentIndex = index;
   }
 
-  // -------------------------------
-  // SWIPE / DRAG HANDLERS
-  // -------------------------------
   onTouchStart(event: TouchEvent) {
     this.startX = event.touches[0].clientX;
     this.isDragging = true;
-    clearInterval(this.interval); // pause auto-slide while dragging
+    clearInterval(this.interval);
   }
 
   onTouchEnd(event: TouchEvent) {
@@ -74,7 +74,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
     const endX = event.changedTouches[0].clientX;
     this.handleSwipe(endX);
     this.isDragging = false;
-    this.startAutoSlide(); // resume auto-slide
+    this.startAutoSlide();
   }
 
   onMouseDown(event: MouseEvent) {
@@ -93,12 +93,20 @@ export class ProductsComponent implements OnInit, OnDestroy {
 
   handleSwipe(endX: number) {
     const deltaX = endX - this.startX;
-    if (Math.abs(deltaX) > 50) { // threshold so tiny moves don’t trigger
-      if (deltaX > 0) {
-        this.prevSlide(); // swipe right
-      } else {
-        this.nextSlide(); // swipe left
-      }
+    if (Math.abs(deltaX) > 50) {
+      deltaX > 0 ? this.prevSlide() : this.nextSlide();
     }
   }
+
+  // -------------------------------
+  // PRODUCT GRID DATA
+  // -------------------------------
+
+  products = PRODUCTS;
+
+
+
+
+
+
 }

@@ -1,0 +1,44 @@
+<!--<div class="product-detail" *ngIf="product">-->
+<div class="product-detail" >
+  <!-- Gallery -->
+  <div class="gallery">
+    <div class="main-image">
+      <img [src]="activeImage" alt="{{ product?.name }}" />
+    </div>
+
+    <div class="thumbnails">
+      <img *ngFor="let img of product?.images"
+           [src]="img"
+           [class.active]="img === activeImage"
+           (click)="setActiveImage(img)" />
+    </div>
+  </div>
+  <!-- Info section -->
+  <div class="info">
+    <h1 class="title">{{ product?.name }}</h1>
+    <p class="description">{{ product?.description }}</p>
+
+    <div class="price">
+      {{ product?.price }} dt
+    </div>
+
+    <!-- Dynamic options -->
+    <div class="variants" *ngFor="let variant of product?.variants">
+      <h4>{{ variant.name }}</h4>
+      <div class="option-values">
+        <button *ngFor="let value of variant?.values"
+                [class.active]="isSelected(variant.name, value)"
+                (click)="selectOption(variant.name, value)">
+          {{ value }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="actions">
+      <button class="cart-btn" (click)="addToCart()" ><img src="../../../assets/images/icons/shopIcon-white.svg" alt="Cart" class="cart-icon" />
+        Add to Cart </button>
+
+    </div>
+  </div>
+</div>

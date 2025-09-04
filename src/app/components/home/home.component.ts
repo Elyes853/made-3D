@@ -1,4 +1,5 @@
 import {Component, ElementRef, ViewChild} from '@angular/core';
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-home',
@@ -8,6 +9,8 @@ import {Component, ElementRef, ViewChild} from '@angular/core';
   styleUrl: './home.component.scss'
 })
 export class HomeComponent {
+  constructor(private router:Router) {
+  }
 
   @ViewChild('bgVideo') bgVideo!: ElementRef<HTMLVideoElement>;
 
@@ -20,5 +23,8 @@ export class HomeComponent {
         console.warn('Autoplay blocked:', err);
       });
     }
+  }
+  goToProducts(){
+    this.router.navigate(["/products"])
   }
 }

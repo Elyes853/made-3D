@@ -1,41 +1,100 @@
 
 
+<!--<nav class="navbar">-->
+<!--  &lt;!&ndash; Left side: search and cart &ndash;&gt;-->
+<!--  <div class="nav-left">-->
+<!--    <button class="icon-btn">-->
+<!--      <img src="../assets/images/icons/searchIcon.svg" alt="Search">-->
+<!--    </button>-->
+<!--    <button class="icon-btn cart-icon-btn"  (click)="cartSidebar.toggleSidebar()">-->
+<!--      <img src="../assets/images/icons/shopIcon.svg" alt="Cart">{{cartCount}}-->
+<!--    </button>-->
+<!--  </div>-->
+
+<!--  &lt;!&ndash; Center: logo &ndash;&gt;-->
+<!--  <div class="logo">-->
+<!--    <img src="./assets/images/made%203D%20logo.svg" alt="Logo">-->
+<!--  </div>-->
+
+<!--  &lt;!&ndash; Desktop menu &ndash;&gt;-->
+<!--  <div class="nav-links desktop">-->
+<!--    <a routerLink="">Home</a>-->
+<!--    <a routerLink="/products">Products</a>-->
+<!--    <a routerLink="/services">Services</a>-->
+<!--    <a routerLink="/contact">Contact</a>-->
+<!--  </div>-->
+
+<!--  &lt;!&ndash; Right side: hamburger &ndash;&gt;-->
+<!--  <div class="hamburger" (click)="toggleMenu()">-->
+<!--    <span></span>-->
+<!--    <span></span>-->
+<!--    <span></span>-->
+<!--  </div>-->
+<!--</nav>-->
+
+<!--&lt;!&ndash; Side menu &ndash;&gt;-->
+<!--<div class="side-menu" [class.open]="isMenuOpen">-->
+<!--  <a routerLink="" (click)="toggleMenu()">Home</a>-->
+<!--  <a routerLink="/products" (click)="toggleMenu()">Products</a>-->
+<!--  <a routerLink="/services" (click)="toggleMenu()">Services</a>-->
+<!--  <a routerLink="/contact" (click)="toggleMenu()">Contact</a>-->
+<!--</div>-->
+
+<!--&lt;!&ndash; Overlay &ndash;&gt;-->
+<!--<div class="overlay" *ngIf="isMenuOpen" (click)="toggleMenu()"></div>-->
+
+
+
+<!--<app-cart-sidebar #cartSidebar></app-cart-sidebar>-->
+
+<!--<router-outlet></router-outlet>-->
+
+
+
+
+
+
+
 <nav class="navbar">
-  <!-- Left side: search and cart -->
+  <!-- Left: search + cart -->
   <div class="nav-left">
-    <button class="icon-btn">
-      <img src="./assets/images/searchIcon.svg" alt="Search">
+    <button class="icon-btn" aria-label="Search">
+      <img src="../assets/images/icons/searchIcon.svg" alt="Search">
     </button>
-    <button class="icon-btn">
-      <img src="./assets/images/shopIcon.svg" alt="Cart">
+    <button class="icon-btn cart-icon-btn" (click)="cartSidebar.toggleSidebar()" aria-label="Cart">
+      <img src="../assets/images/icons/shopIcon.svg" alt="Cart">{{cartCount}}
     </button>
   </div>
 
-  <!-- Center: logo -->
-  <div class="logo">
-    <img src="./assets/images/made%203D%20logo.svg" alt="Logo">
+  <!-- Center: logo (always stays centered now) -->
+  <div class="logo" routerLink="">
+    <img src="./assets/images/made%203D%20logo.svg" alt="Made 3D Logo">
   </div>
 
-  <!-- Desktop menu -->
+  <!-- Desktop nav -->
   <div class="nav-links desktop">
     <a routerLink="">Home</a>
     <a routerLink="/products">Products</a>
+    <a routerLink="/custom">Custom Order</a>
     <a routerLink="/services">Services</a>
     <a routerLink="/contact">Contact</a>
+
   </div>
 
-  <!-- Right side: hamburger -->
-  <div class="hamburger" (click)="toggleMenu()">
+  <!-- Mobile hamburger -->
+  <div class="hamburger" (click)="toggleMenu()" aria-label="Menu">
     <span></span>
     <span></span>
     <span></span>
   </div>
 </nav>
 
+
 <!-- Side menu -->
 <div class="side-menu" [class.open]="isMenuOpen">
   <a routerLink="" (click)="toggleMenu()">Home</a>
   <a routerLink="/products" (click)="toggleMenu()">Products</a>
+  <a routerLink="/custom" (click)="toggleMenu()">Custom Order</a>
   <a routerLink="/services" (click)="toggleMenu()">Services</a>
   <a routerLink="/contact" (click)="toggleMenu()">Contact</a>
 </div>
@@ -43,7 +102,5 @@
 <!-- Overlay -->
 <div class="overlay" *ngIf="isMenuOpen" (click)="toggleMenu()"></div>
 
-
-
-
+<app-cart-sidebar #cartSidebar></app-cart-sidebar>
 <router-outlet></router-outlet>

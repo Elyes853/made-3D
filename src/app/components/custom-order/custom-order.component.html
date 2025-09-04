@@ -1,0 +1,113 @@
+<div class="form-container">
+  <h2>Custom 3D Print Order</h2>
+
+  <form [formGroup]="orderForm" (ngSubmit)="submitOrder()">
+
+    <!-- Name -->
+    <div class="row">
+      <div class="form-group">
+        <input type="text" formControlName="firstName" placeholder=" " [class.error]="isInvalid('firstName')" />
+        <label>First Name</label>
+        <span class="error-msg" *ngIf="isInvalid('firstName')">First name is required</span>
+      </div>
+
+      <div class="form-group">
+        <input type="text" formControlName="lastName" placeholder=" " [class.error]="isInvalid('lastName')" />
+        <label>Last Name</label>
+        <span class="error-msg" *ngIf="isInvalid('lastName')">Last name is required</span>
+      </div>
+    </div>
+
+    <!-- Contact -->
+    <div class="row">
+      <div class="form-group">
+        <input type="text" formControlName="phone" placeholder=" " [class.error]="isInvalid('phone')" />
+        <label>Phone</label>
+        <span class="error-msg" *ngIf="isInvalid('phone')">Valid phone is required</span>
+      </div>
+
+      <div class="form-group">
+        <input type="email" formControlName="email" placeholder=" " [class.error]="isInvalid('email')" />
+        <label>Email</label>
+        <span class="error-msg" *ngIf="isInvalid('email')">Valid email is required</span>
+      </div>
+    </div>
+
+    <!-- Contact preference -->
+    <div class="row">
+      <div class="form-group full">
+        <select formControlName="preferredContact" [class.error]="isInvalid('preferredContact')">
+          <option value="" disabled selected hidden></option>
+          <option value="whatsapp">WhatsApp</option>
+          <option value="phone">Phone Call</option>
+          <option value="email">Email</option>
+        </select>
+        <label>Preferred Contact Method</label>
+        <span class="error-msg" *ngIf="isInvalid('preferredContact')">Please select a contact method</span>
+      </div>
+    </div>
+
+    <!-- Address -->
+    <div class="row">
+      <div class="form-group">
+        <select formControlName="state" [class.error]="isInvalid('state')">
+          <option value="" disabled selected hidden></option>
+          <option *ngFor="let s of states" [value]="s">{{ s }}</option>
+        </select>
+        <label>State</label>
+        <span class="error-msg" *ngIf="isInvalid('state')">State is required</span>
+      </div>
+
+      <div class="form-group">
+        <input type="text" formControlName="city" placeholder=" " [class.error]="isInvalid('city')" />
+        <label>City</label>
+        <span class="error-msg" *ngIf="isInvalid('city')">City is required</span>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="form-group full">
+        <input type="text" formControlName="address" placeholder=" " [class.error]="isInvalid('address')" />
+        <label>Address</label>
+        <span class="error-msg" *ngIf="isInvalid('address')">Address is required</span>
+      </div>
+    </div>
+
+    <!-- File Upload -->
+    <div class="row">
+      <div class="form-group full">
+        <input type="file" formControlName="files" (change)="onFileSelected($event)" multiple accept=".stl,.3mf,.obj,.png,.jpg,.jpeg,.webp,.gif,.pdf" />
+        <label>Upload Files (STL, 3MF, OBJ, PNG, JPG, PDF, etc.)</label>
+        <span class="error-msg" *ngIf="isInvalid('files')">At least one file is required</span>
+      </div>
+    </div>
+
+    <!-- Note -->
+    <div class="row">
+      <div class="form-group full">
+        <input type="text" formControlName="note" placeholder=" " />
+        <label>Note (optional)</label>
+      </div>
+    </div>
+
+    <!-- Agreement -->
+    <div class="row">
+<!--      <div class="form-group full">-->
+        <label class="checkbox-label">
+          <input type="checkbox" formControlName="agreement" />
+
+          I understand that you will contact me before confirming my order.
+        </label>
+        <span class="error-msg" *ngIf="isInvalid('agreement')">You must confirm before submitting</span>
+      </div>
+<!--    </div>-->
+
+    <button type="submit">Submit Order</button>
+  </form>
+
+  <!-- Status / Loading -->
+  <div class="status-message" *ngIf="statusMessage">
+    {{ statusMessage }}
+  </div>
+  <div class="loading-spinner" *ngIf="loading"></div>
+</div>

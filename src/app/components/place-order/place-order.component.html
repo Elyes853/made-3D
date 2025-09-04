@@ -1,0 +1,306 @@
+
+<!--<div class="checkout-container">-->
+<!--  <h2>Checkout</h2>-->
+
+<!--  &lt;!&ndash; Cart items &ndash;&gt;-->
+<!--  <div class="checkout-items" *ngIf="items.length; else emptyCart">-->
+<!--    <div class="checkout-item" *ngFor="let item of items">-->
+<!--      <img [src]="item.image" alt="{{ item.name }}" class="checkout-item-image">-->
+<!--      <div class="checkout-item-info">-->
+<!--        <strong>{{ item.name }}</strong>-->
+<!--        <div *ngIf="item.variant">Variant: {{ item.variant }}</div>-->
+<!--        <div class="quantity-controls">-->
+<!--          <button (click)="decreaseQuantity(item)">−</button>-->
+<!--          <span>{{ item.quantity }}</span>-->
+<!--          <button (click)="increaseQuantity(item)">+</button>-->
+<!--        </div>-->
+<!--        <div>{{ (item.price * item.quantity).toFixed(2) }} dt</div>-->
+<!--      </div>-->
+<!--      <button class="remove-btn" (click)="removeItem(item)">-->
+<!--        <img src="./assets/images/icons/delete.svg" alt="delete-item">-->
+<!--      </button>-->
+<!--    </div>-->
+
+<!--    &lt;!&ndash; Totals &ndash;&gt;-->
+<!--    <div class="checkout-summary">-->
+<!--      <div>Subtotal: {{ subtotal.toFixed(2) }} dt</div>-->
+<!--      <div>Shipping: {{ shipping }} dt</div>-->
+<!--      <strong>Total: {{ total.toFixed(2) }} dt</strong>-->
+<!--    </div>-->
+<!--  </div>-->
+
+<!--  <ng-template #emptyCart>-->
+<!--    <p>Your cart is empty 🛒</p>-->
+<!--  </ng-template>-->
+
+
+
+
+
+
+
+
+
+
+
+<div class="checkout-container">
+  <h2>Checkout</h2>
+
+  <!-- Cart items -->
+  <div class="checkout-items" *ngIf="items.length; else emptyCart">
+
+    <div class="checkout-item" *ngFor="let item of items">
+      <!-- Product image -->
+      <img [src]="item.image" alt="{{ item.name }}" class="checkout-item-image">
+
+      <!-- Product info -->
+      <div class="checkout-item-info">
+        <strong>{{ item.name }}</strong>
+<!--        <div class="variant" *ngIf="item.variant">-->
+<!--          Color: {{ item.variant.color }} / Size: {{ item.variant.size }}-->
+<!--        </div>-->
+        <div class="price">{{ item.price.toFixed(2) }} dt</div>
+      </div>
+
+      <!-- Quantity -->
+      <div class="checkout-item-quantity">
+        <button (click)="decreaseQuantity(item)">−</button>
+        <span>{{ item.quantity }}</span>
+        <button (click)="increaseQuantity(item)">+</button>
+      </div>
+
+      <!-- Total per item -->
+      <div class="checkout-item-total">
+        {{ (item.price * item.quantity).toFixed(2) }} dt
+      </div>
+
+      <!-- Remove -->
+      <button class="remove-btn" (click)="removeItem(item)">
+        <img src="./assets/images/icons/delete.svg" alt="delete-item">
+      </button>
+    </div>
+
+    <!-- Totals -->
+    <div class="checkout-summary">
+      <div>Subtotal: {{ subtotal.toFixed(2) }} dt</div>
+      <div>Shipping: {{ shipping }} dt</div>
+      <div>Total: {{ total.toFixed(2) }} dt</div>
+    </div>
+
+    <!-- Checkout button -->
+  </div>
+
+  <ng-template #emptyCart>
+    <p>Your cart is empty 🛒</p>
+    <button routerLink="/products">Our products </button>
+  </ng-template>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+<!--  &lt;!&ndash; User Info Form &ndash;&gt;-->
+<!--  <form #orderForm="ngForm" (ngSubmit)="checkout()" *ngIf="items.length" novalidate>-->
+<!--    <h2>01. SHIPPING</h2>-->
+
+
+<!--    &lt;!&ndash; Name &ndash;&gt;-->
+<!--    <div class="form-group" [class.invalid]="nameCtrl.invalid && (nameCtrl.touched || orderForm.submitted)">-->
+<!--      <input-->
+<!--        [(ngModel)]="order.name"-->
+<!--        name="name"-->
+<!--        placeholder="Full Name"-->
+<!--        required-->
+<!--        minlength="5"-->
+<!--        #nameCtrl="ngModel">-->
+<!--      <div class="error" *ngIf="nameCtrl.invalid && (nameCtrl.touched || orderForm.submitted)">-->
+<!--        <small *ngIf="nameCtrl.errors?.['required']">Name is required.</small>-->
+<!--        <small *ngIf="nameCtrl.errors?.['minlength']">Name must be at least 5 characters.</small>-->
+<!--      </div>-->
+<!--    </div>-->
+
+<!--    &lt;!&ndash; Phone &ndash;&gt;-->
+<!--    <div class="form-group" [class.invalid]="phoneCtrl.invalid && (phoneCtrl.touched || orderForm.submitted)">-->
+<!--      <input-->
+<!--        [(ngModel)]="order.phone"-->
+<!--        name="phone"-->
+<!--        placeholder="Phone Number"-->
+<!--        required-->
+<!--        pattern="^[0-9]{8,15}$"-->
+<!--        #phoneCtrl="ngModel">-->
+<!--      <div class="error" *ngIf="phoneCtrl.invalid && (phoneCtrl.touched || orderForm.submitted)">-->
+<!--        <small *ngIf="phoneCtrl.errors?.['required']">Phone number is required.</small>-->
+<!--        <small *ngIf="phoneCtrl.errors?.['pattern']">Enter a valid phone number.</small>-->
+<!--      </div>-->
+<!--    </div>-->
+
+<!--    &lt;!&ndash; Email &ndash;&gt;-->
+<!--    <div class="form-group" [class.invalid]="emailCtrl.invalid && (emailCtrl.touched || orderForm.submitted)">-->
+<!--      <input-->
+<!--        [(ngModel)]="order.email"-->
+<!--        name="email"-->
+<!--        type="email"-->
+<!--        placeholder="Email"-->
+<!--        required-->
+<!--        #emailCtrl="ngModel">-->
+<!--      <div class="error" *ngIf="emailCtrl.invalid && (emailCtrl.touched || orderForm.submitted)">-->
+<!--        <small *ngIf="emailCtrl.errors?.['required']">Email is required.</small>-->
+<!--        <small *ngIf="emailCtrl.errors?.['email']">Enter a valid email address.</small>-->
+<!--      </div>-->
+<!--    </div>-->
+
+<!--    &lt;!&ndash; Address &ndash;&gt;-->
+<!--    <div class="form-group" [class.invalid]="addressCtrl.invalid && (addressCtrl.touched || orderForm.submitted)">-->
+<!--    <textarea-->
+<!--      [(ngModel)]="order.address"-->
+<!--      name="address"-->
+<!--      placeholder="Address"-->
+<!--      required-->
+<!--      minlength="10"-->
+<!--      #addressCtrl="ngModel"></textarea>-->
+<!--      <div class="error" *ngIf="addressCtrl.invalid && (addressCtrl.touched || orderForm.submitted)">-->
+<!--        <small *ngIf="addressCtrl.errors?.['required']">Address is required.</small>-->
+<!--        <small *ngIf="addressCtrl.errors?.['minlength']">Address must be at least 10 characters.</small>-->
+<!--      </div>-->
+<!--    </div>-->
+
+<!--    <button type="submit" class="place-order-btn" [disabled]="orderForm.invalid">-->
+
+<!--      Place Order-->
+<!--    </button>-->
+<!--  </form>-->
+
+
+
+
+
+<!--  <div class="form-container">-->
+<!--    <h2>01. SHIPPING</h2>-->
+<!--    <form [formGroup]="shippingForm" (ngSubmit)="onSubmit()">-->
+<!--      <div class="row">-->
+<!--        <input formControlName="firstName" placeholder="First name" [ngClass]="{'error': shippingForm.get('firstName')?.invalid && shippingForm.get('firstName')?.touched}">-->
+<!--        <input formControlName="lastName" placeholder="Last name" [ngClass]="{'error': shippingForm.get('lastName')?.invalid && shippingForm.get('lastName')?.touched}">-->
+<!--      </div>-->
+
+<!--      <div class="row">-->
+<!--        <input formControlName="address" placeholder="Address" [ngClass]="{'error': shippingForm.get('address')?.invalid && shippingForm.get('address')?.touched}">-->
+<!--        <input formControlName="apt" placeholder="Apt, suite, etc. (optional)">-->
+<!--      </div>-->
+
+<!--      <div class="row">-->
+<!--        <input formControlName="city" placeholder="City">-->
+<!--        <select formControlName="state" [ngClass]="{'error': shippingForm.get('state')?.invalid && shippingForm.get('state')?.touched}">-->
+<!--          <option value="">State</option>-->
+<!--          <option *ngFor="let state of states" [value]="state">{{ state }}</option>-->
+<!--        </select>-->
+<!--        <input formControlName="zipCode" placeholder="Zip Code" [ngClass]="{'error': shippingForm.get('zipCode')?.invalid && shippingForm.get('zipCode')?.touched}">-->
+<!--      </div>-->
+
+<!--      <div class="row">-->
+<!--        <input formControlName="email" placeholder="Email" [ngClass]="{'error': shippingForm.get('email')?.invalid && shippingForm.get('email')?.touched}">-->
+<!--        <input formControlName="phone" placeholder="Phone" [ngClass]="{'error': shippingForm.get('phone')?.invalid && shippingForm.get('phone')?.touched}">-->
+<!--      </div>-->
+
+<!--      <p class="privacy">Your privacy is important to us. We will only contact you if there is an issue with your order.</p>-->
+
+<!--      <button type="submit">SAVE & CONTINUE</button>-->
+<!--    </form>-->
+<!--  </div>-->
+
+
+
+
+
+
+
+
+
+  <div class="form-container" *ngIf="items.length">
+    <h2>Shipping Information</h2>
+
+    <form [formGroup]="shippingForm" (ngSubmit)="checkout()">
+
+      <div class="row">
+        <div class="form-group">
+          <input type="text" formControlName="firstName" placeholder=" " [class.error]="isInvalid('firstName')" />
+          <label>First Name</label>
+          <span class="error-msg" *ngIf="isInvalid('firstName')">First name is required</span>
+        </div>
+
+        <div class="form-group">
+          <input type="text" formControlName="lastName" placeholder=" " [class.error]="isInvalid('lastName')" />
+          <label>Last Name</label>
+          <span class="error-msg" *ngIf="isInvalid('lastName')">Last name is required</span>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="form-group">
+          <input type="text" formControlName="phone" placeholder=" " [class.error]="isInvalid('phone')" />
+          <label>Phone</label>
+          <span class="error-msg" *ngIf="isInvalid('phone')">Valid phone is required</span>
+        </div>
+
+        <div class="form-group">
+          <input type="email" formControlName="email" placeholder=" " [class.error]="isInvalid('email')" />
+          <label>Email</label>
+          <span class="error-msg" *ngIf="isInvalid('email')">Valid email is required</span>
+        </div>
+      </div>
+
+
+
+      <div class="row">
+        <div class="form-group">
+          <select formControlName="state" [class.error]="isInvalid('state')">
+            <option value="" disabled selected hidden></option>
+            <option *ngFor="let s of states" [value]="s">{{ s }}</option>
+          </select>
+          <label>State</label>
+          <span class="error-msg" *ngIf="isInvalid('state')">State is required</span>
+        </div>
+
+        <div class="form-group">
+          <input type="text" formControlName="city" placeholder=" " [class.error]="isInvalid('city')" />
+          <label>City</label>
+          <span class="error-msg" *ngIf="isInvalid('city')">City is required</span>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="form-group full">
+          <input type="text" formControlName="address" placeholder=" " [class.error]="isInvalid('address')" />
+          <label>Address</label>
+          <span class="error-msg" *ngIf="isInvalid('address')">Address is required</span>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="form-group full">
+          <input type="text" formControlName="note" placeholder=" " />
+          <label>Note (optional)</label>
+        </div>
+      </div>
+
+      <button type="submit" >Submit Order</button>
+    </form>
+
+    <!-- Status / Loading -->
+    <div class="status-message" *ngIf="statusMessage">
+      {{ statusMessage }}
+    </div>
+
+    <!-- You can show a spinner when loading -->
+    <div class="loading-spinner" *ngIf="loading"></div>
+
+  </div>
+
+

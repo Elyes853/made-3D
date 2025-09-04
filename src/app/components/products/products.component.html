@@ -12,7 +12,7 @@
           <h3>{{ item.subtitle }}</h3>
           <h1>{{ item.title }}</h1>
           <p>{{ item.description }}</p>
-          <button>{{ item.buttonText }}</button>
+          <button [routerLink]="['/details', item.id]" >{{ item.buttonText }}</button>
         </div>
         <div class="carousel-image">
           <img [src]="item.image" alt="Product {{ i }}">
@@ -29,3 +29,21 @@
     </span>
   </div>
 </div>
+
+
+
+
+
+
+
+<div class="product-grid">
+  <app-product
+    *ngFor="let product of products"
+    [id]="product.id"
+    [name]="product.name"
+    [price]="product.price"
+    [images]="product.images"
+    >
+  </app-product>
+</div>
+

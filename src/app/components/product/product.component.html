@@ -1,0 +1,29 @@
+<div class="product-card"
+     (mouseenter)="hovered = true"
+     (mouseleave)="hovered = false">
+
+  <div class="image-wrap" (click)="viewDetails()">
+    <!-- Base image -->
+    <img class="layer base fade"
+         [src]="images?.[0]"
+         [style.opacity]="hovered ? 0 : 1"
+         (load)="onLoad(0)" />
+
+    <!-- Alt image (only if provided) -->
+    <img *ngIf="images?.[1]"
+         class="layer alt fade"
+         [src]="images[1]"
+         [style.opacity]="hovered && loaded[1] ? 1 : 0"
+         (load)="onLoad(1)" />
+  </div>
+
+  <div class="details">
+    <h3>{{ name }}</h3>
+    <p class="price">{{ price }} dt</p>
+
+    <div class="actions">
+      <button class="buy-btn" (click)="addToCart()">Add to Cart</button>
+      <button class="details-btn" (click)="viewDetails()">View Details</button>
+    </div>
+  </div>
+</div>
