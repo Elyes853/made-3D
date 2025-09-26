@@ -16,6 +16,8 @@ export class ProductDetailsComponent implements OnInit {
   product: Product | null = null;
   activeImage!: string;
   selectedOptions: Record<string, string> = {}; // Tracks selected option values
+  showToast = false;
+
 
   constructor(
     private route: ActivatedRoute,
@@ -63,5 +65,12 @@ export class ProductDetailsComponent implements OnInit {
     });
 
     console.log('Added to cart:', this.product.name, this.selectedOptions);
+
+    // Show toast
+    this.showToast = true;
+
+    // Hide toast after 2 seconds
+    setTimeout(() => this.showToast = false, 2000);
   }
+
 }

@@ -1,4 +1,4 @@
-import {Component, input, Input} from '@angular/core';
+import {Component, EventEmitter, input, Input, Output} from '@angular/core';
 import {NgIf} from "@angular/common";
 import {Router, RouterModule} from "@angular/router";
 import {CartService} from "../../services/cart.service";
@@ -11,6 +11,7 @@ import {CartService} from "../../services/cart.service";
   styleUrl: './product.component.scss'
 })
 export class ProductComponent {
+
   constructor(private router:Router,
               private cartService: CartService) {
   }
@@ -20,10 +21,14 @@ export class ProductComponent {
   @Input() name!: string;
   @Input() price!: number;
   @Input() id!: number
+  @Output() addedToCart = new EventEmitter<string>();
+
 
 
   hovered = false;
   loaded: boolean[] = [false, false];
+  showToast = false
+
 
   ngOnInit() {
     // Preload the alt image so the first hover is smooth
@@ -62,5 +67,11 @@ export class ProductComponent {
     });
 
     console.log('Added to cart:', this.name);
+
+    this.addedToCart.emit(this.name);
+
+    // Emit event to parent with product name
+    this.addedToCart.emit(this.name);
+    console.log("emit")
   }
 }

@@ -214,3 +214,29 @@
   }
 }
 
+
+
+
+
+.toast {
+  position: fixed;        /* float above all content */
+  top: 20px;              /* distance from top */
+  left: 50%;              /* center horizontally */
+  transform: translateX(-50%);
+  background: #28a745;    /* green color */
+  color: white;
+  padding: 10px 20px;
+  border-radius: 25px;
+  font-weight: 500;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  z-index: 9999;
+  opacity: 0;
+  animation: slideFade 0.5s forwards;
+}
+
+@keyframes slideFade {
+  0% { opacity: 0; transform: translate(-50%, -20px); }
+  50% { opacity: 1; transform: translate(-50%, 0); }
+  100% { opacity: 1; transform: translate(-50%, 0); }
+}
+

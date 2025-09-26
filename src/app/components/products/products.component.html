@@ -32,8 +32,10 @@
 
 
 
-
-
+<!-- Global top-center toast -->
+<div class="toast" *ngIf="toastVisible">
+  ✔ {{ toastMessage }} added to cart
+</div>
 
 
 <div class="product-grid">
@@ -43,6 +45,7 @@
     [name]="product.name"
     [price]="product.price"
     [images]="product.images"
+    (addedToCart)="showToast($event)"
     >
   </app-product>
 </div>

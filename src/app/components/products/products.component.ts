@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { interval, Subscription } from 'rxjs';
 import { Product } from '../../models/product.model';
-import {NgFor, NgStyle} from "@angular/common";
+import {NgFor, NgIf, NgStyle} from "@angular/common";
 import {Router, RouterLink} from "@angular/router";
 import {ProductComponent} from "../product/product.component";
 import {carouselItems, PRODUCTS} from "../../data/products";
@@ -15,6 +15,7 @@ import {carouselItems, PRODUCTS} from "../../data/products";
     NgFor,
     ProductComponent,
     RouterLink,
+    NgIf
   ],
   templateUrl: './products.component.html',
   styleUrl: './products.component.scss'
@@ -22,6 +23,10 @@ import {carouselItems, PRODUCTS} from "../../data/products";
 
 
 export class ProductsComponent implements OnInit, OnDestroy {
+  toastVisible = false;
+  toastMessage = '';
+
+
 
   constructor(private router: Router) {}
 
@@ -106,7 +111,13 @@ export class ProductsComponent implements OnInit, OnDestroy {
 
 
 
+  showToast(productName: string) {
+    this.toastMessage = productName;
+    this.toastVisible = true;
 
+    // Hide after 2 seconds
+    setTimeout(() => this.toastVisible = false, 2000);
+  }
 
 
 }
