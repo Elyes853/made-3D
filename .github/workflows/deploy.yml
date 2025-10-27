@@ -3,7 +3,10 @@ name: Deploy Angular App to GitHub Pages
 on:
   push:
     branches:
-      - main  # Trigger deployment when pushing to main
+      - main  # Trigger when pushing to main
+
+permissions:
+  contents: write  # ✅ Allow the workflow to push changes
 
 jobs:
   build-and-deploy:
