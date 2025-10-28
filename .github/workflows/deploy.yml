@@ -31,7 +31,7 @@ jobs:
         run: |
           rm -rf docs
           mkdir docs
-          cp -r dist/made3-d/* docs/
+          cp -r dist/made3-d/browser/* docs/
 
       - name: Add CNAME for custom domain
         run: echo "made3D.tn" > docs/CNAME
