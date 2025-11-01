@@ -10,6 +10,7 @@
       <img *ngFor="let img of product?.images"
            [src]="img"
            [class.active]="img === activeImage"
+           loading="lazy"
            (click)="setActiveImage(img)" />
     </div>
   </div>
@@ -43,8 +44,8 @@
   </div>
 
   <!-- Toast / Floating notification -->
-  <div class="toast" *ngIf="showToast">
-    ✔ Added to cart
+  <div class="toast" *ngIf="showToast" [ngClass]="toastType">
+    {{ toastMessage }}
   </div>
 
 </div>
