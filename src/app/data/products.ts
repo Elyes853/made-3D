@@ -651,7 +651,7 @@ export const PRODUCTS: Product [] = [
   {
     id: 26,
     name: 'Boite Uno',
-    price: 10,
+    price: 25,
     description:"Latest smartphone with powerful camera and long battery life.",
     images: ['/assets/images/products/unoBox/unobox2.png','/assets/images/products/unoBox/unobox1.png'],
     variants: [

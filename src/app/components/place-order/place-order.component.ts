@@ -116,6 +116,7 @@ export class PlaceOrderComponent implements OnInit {
       this.statusMessage = 'Some fields are still missing.';
       return;
     }
+    //console.log('Form value:', this.shippingForm.value);
 
     this.loading = true;
     this.statusMessage = '⏳ Placing your order...';
