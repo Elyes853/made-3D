@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {Product} from "../../models/product.model";
 import {ActivatedRoute} from "@angular/router";
 import {ProductService} from "../../services/product.service";
@@ -10,9 +10,11 @@ import {CartService} from "../../services/cart.service";
   standalone: true,
   imports: [NgFor, JsonPipe, NgIf, NgClass],
   templateUrl: './product-details.component.html',
-  styleUrl: './product-details.component.scss'
+  styleUrl: './product-details.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush, // <-- add this line
+
 })
-export class ProductDetailsComponent implements OnInit {
+export class ProductDetailsComponent implements OnInit, AfterViewInit {
 
   product: Product | null = null;
   activeImage!: string;
@@ -24,7 +26,8 @@ export class ProductDetailsComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private productService: ProductService,
-    private cartService: CartService
+    private cartService: CartService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
@@ -32,11 +35,6 @@ export class ProductDetailsComponent implements OnInit {
     this.productService.getProductById(id).subscribe(found => {
       if (found?.images?.length) {
         this.activeImage = found.images[0];
-        // Preload images
-        found.images?.forEach(src => {
-          const img = new Image();
-          img.src = src;
-        });
       }
       if (found) {
         this.product = found;
@@ -48,9 +46,24 @@ export class ProductDetailsComponent implements OnInit {
     });
   }
 
+  ngAfterViewInit() {
+    if (!this.product?.images) return;
+
+    this.product.images.forEach((src, i) => {
+      setTimeout(() => {
+        const img = new Image();
+        img.src = src;
+        img.decoding = 'async';
+      }, i * 100); // load one every 100ms
+    });
+  }
 
   setActiveImage(img: string) {
+    // Instantly update the active image
     this.activeImage = img;
+
+    // Tell Angular to refresh just this component
+    this.cdr.markForCheck();
   }
 
   selectOption(optionName: string, value: string) {

@@ -737,10 +737,32 @@ export const PRODUCTS: Product [] = [
 ];
 
 export const carouselItems = [
-  { id:1, image: 'assets/images/products/carousel Products/first-Photoroom.png', subtitle: 'Summer Big Sale!', title: 'Up To 70% Off', description: 'desk planter.', buttonText: 'Shop Now' },
-  { id:2, image: 'assets/images/products/carousel Products/carousel5.png', subtitle: 'New Collection', title: 'Modern Chairs', description: 'Comfortable and stylish.', buttonText: 'Discover' },
-  { id:3, image: 'assets/images/products/carousel Products/carousel3.png', subtitle: 'Special Discount', title: 'Buy 1 Get 1 Free', description: 'Limited time offer.', buttonText: 'Grab Now' }
+  {
+    id: 7,
+    image: 'assets/images/products/carousel Products/first-Photoroom.png',
+    subtitle: 'Améliore ton setup',
+    title: 'Propre. Compact. Stylé.',
+    description: 'Offre à tes manettes un vrai support.',
+    buttonText: 'Découvrir'
+  },
+  {
+    id: 23,
+    image: 'assets/images/products/carousel Products/carousel5.png',
+    subtitle: 'Nouvelle collection',
+    title: 'Stands modernes',
+    description: 'Pensés pour les gamers qui aiment le style.',
+    buttonText: 'Voir plus'
+  },
+  {
+    id: 20,
+    image: 'assets/images/products/carousel Products/carousel3.png',
+    subtitle: 'Pour chaque setup',
+    title: 'Mets en valeur ton équipement',
+    description: 'Faits pour sublimer ton espace gaming.',
+    buttonText: 'Explorer'
+  }
 ]
+
 
 // {
 //   "id": 1,

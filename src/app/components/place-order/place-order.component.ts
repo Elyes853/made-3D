@@ -16,7 +16,7 @@ export class PlaceOrderComponent implements OnInit {
   statusMessage = '';
   loading = false;
   items: CartItem[] = [];
-  shipping = 9; // fixed shipping fee
+  shipping = 8; // fixed shipping fee
   subtotal = 0;
   total = 0;
 
