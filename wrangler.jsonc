@@ -1,7 +1,14 @@
 {
   "name": "made3d",
-  "compatibility_date": "2025-11-06",
   "assets": {
-    "directory": "./dist/made3-d/browser"
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "html_handling": "serve",
+    "not_found_handling": "404",
+    "cache_control": {
+      "browser_ttl": 604800, // 1 week in seconds
+      "edge_ttl": 604800,
+      "bypass_cache": false
+    }
   }
 }
