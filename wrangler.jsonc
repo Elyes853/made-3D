@@ -1,16 +1,7 @@
 {
   "name": "made3d",
-  "main": "src/main.ts",
-  "compatibility_date": "2025-11-07",
+  "compatibility_date": "2025-11-06",
   "assets": {
-    "directory": "./dist",
-    // 👇 New valid values:
-    "html_handling": "auto-trailing-slash",
-    "not_found_handling": "single-page-application"
+    "directory": "./dist/made3-d/browser"
   },
-  // Optional: recommended for SPA caching
-  "cache_ttl": {
-    "edge": 604800, // 7 days
-    "browser": 604800
-  }
 }
