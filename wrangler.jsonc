@@ -1,14 +1,15 @@
 {
   "name": "made3d",
+  "main": "src/index.ts",
+  "compatibility_date": "2025-11-07",
   "assets": {
     "directory": "./dist",
-    "binding": "ASSETS",
-    "html_handling": "serve",
-    "not_found_handling": "404",
-    "cache_control": {
-      "browser_ttl": 604800, // 1 week in seconds
-      "edge_ttl": 604800,
-      "bypass_cache": false
-    }
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "single-page-application"
+  },
+  // Optional: recommended for SPA caching
+  "cache_ttl": {
+    "edge": 604800, // 7 days
+    "browser": 604800
   }
 }
