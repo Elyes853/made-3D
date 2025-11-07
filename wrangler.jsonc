@@ -1,9 +1,10 @@
 {
   "name": "made3d",
-  "main": "src/index.ts",
+  "main": "src/main.ts",
   "compatibility_date": "2025-11-07",
   "assets": {
     "directory": "./dist",
+    // 👇 New valid values:
     "html_handling": "auto-trailing-slash",
     "not_found_handling": "single-page-application"
   },
