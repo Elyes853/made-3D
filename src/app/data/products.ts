@@ -103,7 +103,7 @@ export const PRODUCTS: Product [] = [
   {
     id: 20,
     name: "rope ps4 ps5 xbox",
-    price: 51.0,
+    price: 39.0,
     description: "support manette xbox, ps4 et ps5 sous forme de corde",
     images: [
       "/assets/images/products/controller-stands-website/rope ps4 ps5 xbox2/2024-11-04_162a1f3f645b18.webp",
@@ -133,7 +133,7 @@ export const PRODUCTS: Product [] = [
   {
     id: 18,
     name: "pillow xbox",
-    price: 37.0,
+    price: 30.0,
     description: "support manette xbox sous forme de monstre octopus",
     images: [
       "/assets/images/products/controller-stands-website/pillow xbox/1B00BACF-72FE-4045-A2B2-24AA34CC56D9_1_201_a.webp",
@@ -328,7 +328,7 @@ export const PRODUCTS: Product [] = [
   {
     id: 19,
     name: "rope ps4 ps5 xbox",
-    price: 61.0,
+    price: 40.0,
     description: "support manette xbox, ps4 et ps5 sous forme de corde",
     images: [
       "/assets/images/products/controller-stands-website/rope ps4 ps5 xbox/2024-11-04_20f12983094bc8.webp",
@@ -428,7 +428,7 @@ export const PRODUCTS: Product [] = [
   {
     id: 10,
     name: "hand xbox ps4 ps5",
-    price: 42.0,
+    price: 32.0,
     description: "support manette xbox et ps5 sous forme de monstre octopus",
     images: [
       "/assets/images/products/controller-stands-website/hand xbox ps4 ps5/first.webp",
