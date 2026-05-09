@@ -161,9 +161,6 @@
 //
 //
 
-
-
-
 /* Global reset */
 * {
   font-family: Arial, sans-serif;
@@ -178,13 +175,15 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #ffffff;
+  background: rgba(255, 255, 255, 0.97);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   padding: 0.75rem 1.5rem;
   color: #111;
   position: sticky;
   top: 0;
   z-index: 50;
-  border-bottom: 1px solid #e5e5e5;
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.08);
 }
 
 /* Left section */
@@ -225,6 +224,31 @@ button.cart-icon-btn img {
   color: #0070f3; /* accent hover color */
 }
 
+/* Lithophane highlighted nav link */
+.nav-link-litho {
+  background: linear-gradient(135deg, #7c3aed, #a78bfa) !important;
+  color: #fff !important;
+  padding: 6px 16px !important;
+  border-radius: 100px !important;
+  font-weight: 600 !important;
+  font-size: 0.85rem !important;
+  text-decoration: none !important;
+  transition:
+    box-shadow 0.2s ease,
+    transform 0.2s ease !important;
+
+  &:hover {
+    color: #fff !important;
+    box-shadow: 0 0 18px rgba(167, 139, 250, 0.5) !important;
+    transform: translateY(-1px);
+  }
+}
+
+.side-menu .nav-link-litho {
+  display: inline-block;
+  margin: 2px 0;
+}
+
 /* Buttons for search/cart */
 .icon-btn {
   background: none;
@@ -236,7 +260,7 @@ button.cart-icon-btn img {
 }
 
 .icon-btn:hover {
-  background: rgba(0,0,0,0.05);
+  background: rgba(0, 0, 0, 0.05);
 }
 
 .icon-btn img {
@@ -305,24 +329,24 @@ button.cart-icon-btn img {
 .overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.4);
+  background: rgba(0, 0, 0, 0.4);
   z-index: 55;
 }
-
-
 
 /* Navbar */
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #ffffff;
+  background: rgba(255, 255, 255, 0.97);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   padding: 0.75rem 1.5rem;
   color: #111;
   position: sticky;
   top: 0;
   z-index: 50;
-  border-bottom: 1px solid #e5e5e5;
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.08);
   margin: 0 20px;
 }
 
@@ -360,7 +384,6 @@ button.cart-icon-btn img {
   cursor: pointer;
 }
 
-
 /* Responsive */
 @media (max-width: 768px) {
   .nav-links.desktop {
@@ -371,7 +394,7 @@ button.cart-icon-btn img {
     justify-content: center;
   }
 
-  .navbar{
+  .navbar {
     margin: 0px;
   }
 }
@@ -387,4 +410,3 @@ button.cart-icon-btn img {
     justify-content: flex-start;
   }
 }
-

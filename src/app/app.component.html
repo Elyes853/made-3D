@@ -1,5 +1,3 @@
-
-
 <!--<nav class="navbar">-->
 <!--  &lt;!&ndash; Left side: search and cart &ndash;&gt;-->
 <!--  <div class="nav-left">-->
@@ -43,42 +41,40 @@
 <!--&lt;!&ndash; Overlay &ndash;&gt;-->
 <!--<div class="overlay" *ngIf="isMenuOpen" (click)="toggleMenu()"></div>-->
 
-
-
 <!--<app-cart-sidebar #cartSidebar></app-cart-sidebar>-->
 
 <!--<router-outlet></router-outlet>-->
-
-
-
-
-
-
 
 <nav class="navbar">
   <!-- Left: search + cart -->
   <div class="nav-left">
     <button class="icon-btn" aria-label="Search">
-      <img src="../assets/images/icons/searchIcon.svg" alt="Search">
+      <img src="../assets/images/icons/searchIcon.svg" alt="Search" />
     </button>
-    <button class="icon-btn cart-icon-btn" (click)="cartSidebar.toggleSidebar()" aria-label="Cart">
-      <img src="../assets/images/icons/shopIcon.svg" alt="Cart">{{cartCount}}
+    <button
+      class="icon-btn cart-icon-btn"
+      (click)="cartSidebar.toggleSidebar()"
+      aria-label="Cart"
+    >
+      <img src="../assets/images/icons/shopIcon.svg" alt="Cart" />{{
+        cartCount
+      }}
     </button>
   </div>
 
   <!-- Center: logo (always stays centered now) -->
   <div class="logo" routerLink="">
-    <img src="./assets/images/made%203D%20logo.svg" alt="Made 3D Logo">
+    <img src="./assets/images/made%203D%20logo.svg" alt="Made 3D Logo" />
   </div>
 
   <!-- Desktop nav -->
   <div class="nav-links desktop">
     <a routerLink="">Accueil</a>
     <a routerLink="/products">Produits</a>
-<!--    <a routerLink="/custom">Custom Order</a>-->
+    <a routerLink="/lithophane" class="nav-link-litho">Porte-clés</a>
+    <!--    <a routerLink="/custom">Custom Order</a>-->
     <a routerLink="/services">Services</a>
     <a routerLink="/contact">Contact</a>
-
   </div>
 
   <!-- Mobile hamburger -->
@@ -89,12 +85,14 @@
   </div>
 </nav>
 
-
 <!-- Side menu -->
 <div class="side-menu" [class.open]="isMenuOpen">
   <a routerLink="" (click)="toggleMenu()">Accueil</a>
   <a routerLink="/products" (click)="toggleMenu()">Produits</a>
-<!--  <a routerLink="/custom" (click)="toggleMenu()">Custom Order</a>-->
+  <a routerLink="/lithophane" class="nav-link-litho" (click)="toggleMenu()"
+    >✦ Porte-clés</a
+  >
+  <!--  <a routerLink="/custom" (click)="toggleMenu()">Custom Order</a>-->
   <a routerLink="/services" (click)="toggleMenu()">Services</a>
   <a routerLink="/contact" (click)="toggleMenu()">Contact</a>
 </div>
