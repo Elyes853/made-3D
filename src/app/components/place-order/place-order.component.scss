@@ -21,10 +21,28 @@
   height: 70px;
   object-fit: cover;
   border-radius: 6px;
+
+  &.litho-thumb {
+    filter: grayscale(100%);
+    border: 1.5px solid #a78bfa;
+  }
 }
 
 .checkout-item-info {
   flex: 1;
+
+  .litho-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    background: rgba(167, 139, 250, 0.15);
+    border: 1px solid rgba(167, 139, 250, 0.4);
+    border-radius: 100px;
+    color: #a78bfa;
+    font-size: 0.72rem;
+    font-weight: 600;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
 }
 
 .quantity-controls {
@@ -76,22 +94,6 @@
 //}
 //
 //
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 //
 //body {
@@ -145,15 +147,6 @@
 //  color: #666;
 //  margin-bottom: 20px;
 //}
-
-
-
-
-
-
-
-
-
 
 .form-container {
   max-width: 700px;
@@ -230,7 +223,6 @@ select.error {
   display: block;
 }
 
-
 button {
   margin-top: 20px;
   padding: 12px 25px;
@@ -245,19 +237,6 @@ button {
 button:hover {
   background-color: #333;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 .checkout-container {
   max-width: 800px;
@@ -378,7 +357,9 @@ button:hover {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.2s, border-color 0.2s;
+  transition:
+    background 0.2s,
+    border-color 0.2s;
   color: black;
 }
 
@@ -394,19 +375,15 @@ button:hover {
   font-weight: 500;
 }
 
-.checkout-summary div{
+.checkout-summary div {
   margin-top: 0.4rem;
   color: #5f5f5f;
 }
 
-.checkout-summary div:nth-child(3){
+.checkout-summary div:nth-child(3) {
   margin-top: 0.4rem;
   color: black;
-
 }
-
-
-
 
 .status-message {
   margin-top: 1rem;
@@ -433,11 +410,10 @@ button:hover {
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
-
-
-
-
-

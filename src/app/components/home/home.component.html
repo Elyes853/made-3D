@@ -1,6 +1,5 @@
 <!--video-->
 
-
 <div class="video-container">
   <!-- Background video -->
   <video #bgVideo autoplay muted defaultMuted loop playsinline preload="auto">
@@ -14,6 +13,11 @@
   <div class="content">
     <h1>Bienvenue chez Made 3D</h1>
     <p>Là où les idées deviennent réalité</p>
-    <button class="glass-btn" (click)="goToProducts()">Nos produits</button>
+    <div class="hero-btns">
+      <button class="glass-btn" (click)="goToProducts()">Nos produits</button>
+      <button class="glass-btn" (click)="goToLithophane()">
+        Porte-clés Personnalisés
+      </button>
+    </div>
   </div>
 </div>

@@ -1,0 +1,965 @@
+// ─── Variables ──────────────────────────────────────────────────────────────
+$bg-dark: #0a0a12;
+$bg-card: #12121e;
+$border: rgba(255, 255, 255, 0.08);
+$accent: #a78bfa; // soft violet
+$accent-lit: #f0c4fc; // lit-lithophane highlight
+$text-main: #e8e8f0;
+$text-muted: #8888a8;
+$radius: 16px;
+$radius-sm: 10px;
+$transition: 0.2s ease;
+
+// ─── Page wrapper ───────────────────────────────────────────────────────────
+.litho-page {
+  background: $bg-dark;
+  color: $text-main;
+  font-family: "Segoe UI", system-ui, sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+// ─── HERO ────────────────────────────────────────────────────────────────────
+.litho-hero {
+  position: relative;
+  min-height: 88vh;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 3rem;
+  padding: 7rem 8vw 5rem;
+  overflow: hidden;
+
+  .hero-bg-glow {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(
+        ellipse 60% 55% at 30% 40%,
+        rgba(167, 139, 250, 0.18) 0%,
+        transparent 70%
+      ),
+      radial-gradient(
+        ellipse 40% 40% at 75% 60%,
+        rgba(240, 196, 252, 0.1) 0%,
+        transparent 70%
+      );
+    pointer-events: none;
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 1;
+    max-width: 560px;
+
+    .hero-badge {
+      display: inline-block;
+      padding: 4px 14px;
+      border-radius: 100px;
+      border: 1px solid rgba($accent, 0.5);
+      background: rgba($accent, 0.12);
+      color: $accent;
+      font-size: 0.8rem;
+      letter-spacing: 0.06em;
+      margin-bottom: 1.2rem;
+    }
+
+    h1 {
+      font-size: clamp(2.2rem, 5vw, 3.4rem);
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, #fff 40%, $accent-lit 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    p {
+      color: $text-muted;
+      font-size: 1.1rem;
+      line-height: 1.7;
+      margin-bottom: 2rem;
+    }
+
+    .hero-cta {
+      padding: 14px 32px;
+      background: linear-gradient(135deg, $accent, #c084fc);
+      color: #fff;
+      border: none;
+      border-radius: $radius;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition:
+        opacity $transition,
+        transform $transition;
+
+      &:hover {
+        opacity: 0.88;
+        transform: translateY(-2px);
+      }
+    }
+  }
+
+  .hero-preview-cards {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    gap: 1.5rem;
+    flex-shrink: 0;
+
+    .hero-card {
+      width: 150px;
+      height: 200px;
+      border-radius: $radius;
+      border: 1px solid $border;
+      display: flex;
+      align-items: flex-end;
+      padding: 10px;
+      position: relative;
+      overflow: hidden;
+
+      .hero-card-label {
+        font-size: 0.72rem;
+        letter-spacing: 0.04em;
+        color: $text-muted;
+      }
+
+      &.dark {
+        background: #1a1a28;
+        // Simulated dark lithophane texture
+        &::before {
+          content: "";
+          position: absolute;
+          inset: 0;
+          background: repeating-linear-gradient(
+            -45deg,
+            transparent,
+            transparent 3px,
+            rgba(255, 255, 255, 0.02) 3px,
+            rgba(255, 255, 255, 0.02) 6px
+          );
+        }
+      }
+
+      &.lit {
+        background: linear-gradient(135deg, #f8edf9, #e8d4ee);
+        box-shadow: 0 0 40px rgba(240, 196, 252, 0.35);
+
+        .hero-card-label {
+          color: #888;
+        }
+
+        // Simulated portrait
+        &::before {
+          content: "";
+          position: absolute;
+          inset: 16px;
+          background: linear-gradient(
+            160deg,
+            rgba(0, 0, 0, 0.25),
+            rgba(0, 0, 0, 0.05) 50%,
+            rgba(0, 0, 0, 0.2)
+          );
+          border-radius: 8px;
+        }
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 5rem 5vw 3rem;
+    min-height: 70vh;
+    gap: 2rem;
+
+    .hero-preview-cards {
+      display: none;
+    }
+
+    .hero-content h1 {
+      font-size: clamp(1.8rem, 7vw, 2.6rem);
+    }
+    .hero-content p {
+      font-size: 0.95rem;
+    }
+    .hero-cta {
+      width: 100%;
+      text-align: center;
+      padding: 16px;
+    }
+  }
+}
+
+// ─── INFO STRIP ──────────────────────────────────────────────────────────────
+.info-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  border-top: 1px solid $border;
+  border-bottom: 1px solid $border;
+
+  .info-item {
+    flex: 1 1 220px;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.6rem 2rem;
+    border-right: 1px solid $border;
+
+    &:last-child {
+      border-right: none;
+    }
+
+    .info-icon {
+      font-size: 1.8rem;
+      flex-shrink: 0;
+    }
+
+    strong {
+      display: block;
+      font-size: 0.92rem;
+      color: $text-main;
+      margin-bottom: 3px;
+    }
+
+    p {
+      font-size: 0.8rem;
+      color: $text-muted;
+      margin: 0;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .info-item {
+      flex: 1 1 50%;
+      border-right: none;
+      border-bottom: 1px solid $border;
+      padding: 1rem 1.2rem;
+    }
+  }
+
+  @media (max-width: 400px) {
+    .info-item {
+      flex: 1 1 100%;
+    }
+  }
+}
+
+// ─── CONFIGURATOR ────────────────────────────────────────────────────────────
+.litho-configurator {
+  padding: 2.5rem 3vw;
+
+  @media (min-width: 600px) {
+    padding: 4rem 4vw;
+  }
+
+  .configurator-container {
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+
+    @media (min-width: 600px) {
+      gap: 2rem;
+    }
+  }
+}
+
+// ─── STEP CARD ───────────────────────────────────────────────────────────────
+.step-card {
+  background: $bg-card;
+  border: 1px solid $border;
+  border-radius: $radius;
+  padding: 1.2rem 1rem;
+  transition: border-color $transition;
+
+  @media (min-width: 600px) {
+    padding: 2rem;
+  }
+
+  &:hover {
+    border-color: rgba($accent, 0.25);
+  }
+
+  .step-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+
+    .step-badge {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, $accent, #c084fc);
+      color: #fff;
+      font-weight: 700;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    h2 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: $text-main;
+      margin: 0;
+    }
+  }
+}
+
+// ─── UPLOAD ZONE ─────────────────────────────────────────────────────────────
+.upload-zone {
+  border: 2px dashed rgba(255, 255, 255, 0.12);
+  border-radius: $radius;
+  background: rgba(255, 255, 255, 0.025);
+  min-height: 280px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition:
+    border-color $transition,
+    background $transition;
+  overflow: hidden;
+
+  &:hover:not(.has-image) {
+    border-color: rgba($accent, 0.5);
+    background: rgba($accent, 0.05);
+  }
+
+  &.drag-over {
+    border-color: $accent;
+    background: rgba($accent, 0.1);
+  }
+
+  &.has-image {
+    cursor: default;
+    border-color: rgba($accent, 0.3);
+  }
+
+  .upload-placeholder {
+    text-align: center;
+    padding: 2rem;
+
+    .upload-icon {
+      width: 64px;
+      height: 64px;
+      margin: 0 auto 1.2rem;
+      color: $text-muted;
+
+      svg {
+        width: 100%;
+        height: 100%;
+      }
+    }
+
+    .upload-title {
+      font-size: 1.1rem;
+      color: $text-main;
+      margin-bottom: 0.4rem;
+    }
+
+    .upload-sub {
+      font-size: 0.9rem;
+      color: $text-muted;
+
+      strong {
+        color: $accent;
+        text-decoration: underline;
+      }
+    }
+
+    .upload-formats {
+      margin-top: 0.8rem;
+      font-size: 0.75rem;
+      color: rgba($text-muted, 0.6);
+      letter-spacing: 0.04em;
+    }
+  }
+
+  .preview-wrapper {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 3rem 1.5rem;
+
+    .preview-frame {
+      width: 4cm;
+      height: 4cm;
+      flex-shrink: 0;
+      background: #0d0d1a;
+      border-radius: $radius-sm;
+      overflow: hidden;
+      position: relative;
+      border: 1px solid $border;
+      touch-action: none;
+      user-select: none;
+      cursor: grab;
+      transition:
+        clip-path $transition,
+        border-radius $transition;
+
+      &:active {
+        cursor: grabbing;
+      }
+
+      .preview-img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        transform-origin: center center;
+        transition:
+          transform 0.1s,
+          filter 0.1s;
+      }
+    }
+
+    .preview-actions {
+      display: flex;
+      gap: 0.8rem;
+    }
+  }
+}
+
+// ─── ADJUSTMENTS ─────────────────────────────────────────────────────────────
+.adjustments-layout {
+  display: grid;
+  grid-template-columns: 1fr; // single column on mobile
+  gap: 1.2rem;
+  align-items: start;
+
+  @media (min-width: 700px) {
+    grid-template-columns: auto 1fr;
+    gap: 2rem;
+  }
+
+  .adj-preview {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+
+    .adj-frame {
+      width: 4cm;
+      height: 4cm;
+      background: #0d0d1a;
+      border-radius: $radius-sm;
+      overflow: hidden;
+      position: relative;
+      border: 1px solid $border;
+      touch-action: none;
+      user-select: none;
+      cursor: grab;
+      transition:
+        clip-path $transition,
+        border-radius $transition;
+
+      &:active {
+        cursor: grabbing;
+      }
+
+      img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        transform-origin: center center;
+        transition:
+          transform 0.05s,
+          filter 0.05s;
+      }
+    }
+
+    .adj-hint {
+      font-size: 0.72rem;
+      color: $text-muted;
+      text-align: center;
+      margin-top: 0.6rem;
+    }
+  }
+
+  .controls-grid {
+    display: grid;
+    grid-template-columns: 1fr; // single column on mobile
+    gap: 1rem;
+
+    @media (min-width: 500px) {
+      grid-template-columns: 1fr 1fr;
+      gap: 1.2rem;
+    }
+  }
+}
+
+.control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+
+  .control-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.82rem;
+    color: $text-muted;
+
+    .control-value {
+      font-weight: 600;
+      color: $accent;
+      min-width: 42px;
+      text-align: right;
+    }
+  }
+
+  .control-hint {
+    font-size: 0.7rem;
+    color: rgba($accent, 0.7);
+    margin-top: 2px;
+  }
+
+  input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 4px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    outline: none;
+    cursor: pointer;
+
+    &::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: $accent;
+      cursor: pointer;
+      transition: transform $transition;
+
+      &:hover {
+        transform: scale(1.2);
+      }
+    }
+
+    &::-moz-range-thumb {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: $accent;
+      border: none;
+      cursor: pointer;
+    }
+  }
+
+  .range-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    input[type="range"] {
+      flex: 1;
+    }
+
+    .icon-btn {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid $border;
+      color: $text-main;
+      border-radius: 8px;
+      width: 32px;
+      height: 32px;
+      cursor: pointer;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background $transition;
+
+      &:hover {
+        background: rgba($accent, 0.15);
+      }
+    }
+  }
+
+  .toggle-row {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .toggle-btn {
+    flex: 1;
+    padding: 6px 10px;
+    border-radius: 8px;
+    border: 1px solid $border;
+    background: rgba(255, 255, 255, 0.04);
+    color: $text-muted;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all $transition;
+
+    &.active {
+      border-color: $accent;
+      background: rgba($accent, 0.15);
+      color: $accent;
+      font-weight: 600;
+    }
+
+    &:hover:not(.active) {
+      background: rgba(255, 255, 255, 0.08);
+    }
+  }
+}
+
+.reset-btn {
+  margin-top: 1rem;
+}
+
+// ─── SHAPE GRID ──────────────────────────────────────────────────────────────
+.shape-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.8rem;
+
+  @media (max-width: 400px) {
+    gap: 0.6rem;
+  }
+}
+
+.shape-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 2px solid $border;
+  border-radius: $radius;
+  padding: 1.2rem 0.8rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all $transition;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+
+  &:hover {
+    border-color: rgba($accent, 0.4);
+    background: rgba($accent, 0.06);
+  }
+
+  &.selected {
+    border-color: $accent;
+    background: rgba($accent, 0.12);
+    box-shadow: 0 0 24px rgba($accent, 0.18);
+  }
+
+  .shape-icon-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 64px;
+    margin-bottom: 0.75rem;
+  }
+
+  .shape-name {
+    font-size: 1rem;
+    font-weight: 700;
+    color: $text-main;
+    margin-bottom: 3px;
+  }
+
+  .shape-dim {
+    font-size: 0.72rem;
+    color: $text-muted;
+    letter-spacing: 0.04em;
+  }
+}
+
+// ─── Shape icons (visual shape previews inside cards) ────────────────────────
+.shape-icon {
+  width: 52px;
+  height: 52px;
+  background: linear-gradient(
+    135deg,
+    rgba($accent, 0.5),
+    rgba($accent-lit, 0.4)
+  );
+  border: 2px solid rgba($accent, 0.6);
+  transition: transform $transition;
+
+  &--square {
+    border-radius: 0px;
+  }
+
+  &--circle {
+    clip-path: circle(50% at 50% 50%);
+  }
+
+  &--heart {
+    border: none;
+    background: $accent;
+    clip-path: polygon(
+      50% 30%,
+      63% 19%,
+      77% 16%,
+      90% 22%,
+      97% 35%,
+      94% 49%,
+      85% 63%,
+      72% 74%,
+      60% 83%,
+      50% 90%,
+      40% 83%,
+      28% 74%,
+      15% 63%,
+      6% 49%,
+      3% 35%,
+      10% 22%,
+      23% 16%,
+      37% 19%
+    );
+  }
+}
+
+// ─── Shape clip masks for preview frames ─────────────────────────────────────
+.preview-frame,
+.adj-frame {
+  &.shape-circle {
+    clip-path: circle(50% at 50% 50%);
+  }
+
+  &.shape-heart {
+    clip-path: polygon(
+      50% 30%,
+      63% 19%,
+      77% 16%,
+      90% 22%,
+      97% 35%,
+      94% 49%,
+      85% 63%,
+      72% 74%,
+      60% 83%,
+      50% 90%,
+      40% 83%,
+      28% 74%,
+      15% 63%,
+      6% 49%,
+      3% 35%,
+      10% 22%,
+      23% 16%,
+      37% 19%
+    );
+  }
+  // square: default (no extra clip needed)
+}
+
+.price-note {
+  text-align: center;
+  margin-top: 1rem;
+  font-size: 0.85rem;
+  color: $text-muted;
+
+  strong {
+    color: $accent;
+    font-size: 1rem;
+  }
+}
+
+// ─── CART STEP ────────────────────────────────────────────────────────────────
+.step-cart {
+  .cart-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+
+    .cart-summary-info {
+      display: flex;
+      flex-direction: column;
+
+      .cart-item-name {
+        font-size: 1rem;
+        font-weight: 600;
+        color: $text-main;
+      }
+
+      .cart-item-price {
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: $accent;
+      }
+    }
+  }
+
+  .success-banner {
+    margin-top: 1rem;
+    padding: 12px 20px;
+    background: rgba(#4ade80, 0.12);
+    border: 1px solid rgba(#4ade80, 0.3);
+    border-radius: $radius-sm;
+    color: #4ade80;
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+
+  .order-note {
+    margin-top: 1rem;
+    font-size: 0.8rem;
+    color: $text-muted;
+    line-height: 1.6;
+  }
+}
+
+// ─── BUTTONS ─────────────────────────────────────────────────────────────────
+.btn-add-cart {
+  padding: 14px 28px;
+  background: linear-gradient(135deg, $accent, #c084fc);
+  color: #fff;
+  border: none;
+  border-radius: $radius;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    opacity $transition,
+    transform $transition;
+  white-space: nowrap;
+
+  &:hover:not(:disabled) {
+    opacity: 0.88;
+    transform: translateY(-2px);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  .loading-text {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+  }
+}
+
+.btn-secondary {
+  padding: 8px 18px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid $border;
+  border-radius: $radius-sm;
+  color: $text-main;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background $transition;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+}
+
+.btn-ghost {
+  background: none;
+  border: 1px solid $border;
+  border-radius: $radius-sm;
+  color: $text-muted;
+  font-size: 0.82rem;
+  padding: 7px 14px;
+  cursor: pointer;
+  transition: all $transition;
+
+  &:hover {
+    border-color: rgba($accent, 0.4);
+    color: $accent;
+  }
+}
+
+// ─── HOW IT WORKS ────────────────────────────────────────────────────────────
+.litho-about {
+  padding: 5rem 8vw;
+  background: rgba(255, 255, 255, 0.02);
+  border-top: 1px solid $border;
+
+  h2 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 3rem;
+    background: linear-gradient(135deg, #fff, $accent-lit);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .about-container {
+    max-width: 960px;
+    margin: 0 auto;
+  }
+
+  .steps-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .how-step {
+    flex: 1 1 180px;
+    max-width: 200px;
+    text-align: center;
+
+    .how-icon {
+      font-size: 2.2rem;
+      margin-bottom: 0.8rem;
+    }
+
+    h3 {
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: $text-main;
+      margin-bottom: 0.4rem;
+    }
+
+    p {
+      font-size: 0.8rem;
+      color: $text-muted;
+      line-height: 1.6;
+    }
+  }
+
+  .how-arrow {
+    font-size: 1.5rem;
+    color: rgba($accent, 0.5);
+    flex-shrink: 0;
+
+    @media (max-width: 600px) {
+      display: none;
+    }
+  }
+}
+
+// ─── Keyframes ───────────────────────────────────────────────────────────────
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

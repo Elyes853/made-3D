@@ -6,13 +6,14 @@ export interface CartItem {
   id: number;
   name: string;
   price: number;
-  variant?: string;
+  variant?: string; // for lithophanes: 'litho:<uuid>'
   quantity: number;
   image: string;
+  type?: 'product' | 'lithophane';
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CartService {
   private storageKey = 'cart';
@@ -53,7 +54,7 @@ export class CartService {
 
   addToCart(product: Omit<CartItem, 'quantity'>) {
     const existing = this.cart.find(
-      (item) => item.id === product.id && item.variant === product.variant
+      (item) => item.id === product.id && item.variant === product.variant,
     );
 
     if (existing) {
@@ -67,7 +68,7 @@ export class CartService {
 
   removeFromCart(productId: number, variant?: string) {
     this.cart = this.cart.filter(
-      (item) => !(item.id === productId && item.variant === variant)
+      (item) => !(item.id === productId && item.variant === variant),
     );
     this.saveCart();
   }
@@ -77,9 +78,13 @@ export class CartService {
     this.saveCart();
   }
 
-  updateQuantity(productId: number, variant: string | undefined, quantity: number) {
+  updateQuantity(
+    productId: number,
+    variant: string | undefined,
+    quantity: number,
+  ) {
     const existing = this.cart.find(
-      (item) => item.id === productId && item.variant === variant
+      (item) => item.id === productId && item.variant === variant,
     );
 
     if (existing) {
@@ -91,5 +96,4 @@ export class CartService {
       }
     }
   }
-
 }

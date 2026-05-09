@@ -1,14 +1,15 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {Observable} from "rxjs";
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class OrderService {
-  private orderUrl = 'https://script.google.com/macros/s/AKfycbwtfyoh8wPHSGpvVh_HAcQtYErGaWmOCdgnbbltIx2EIYyIt8vazyD3MZqpoEecbQUKTg/exec'; // Replace with your Apps Script URL
-  private customOrderUrl = ""
-  constructor(private http: HttpClient) { }
+  private orderUrl =
+    'https://script.google.com/macros/s/AKfycbwsT-CCMi7V_CSuJJ4Ch6RS_32D1q_TzTr4IHxC4iwxLRXkZEUSMVvPJAh95nQdpbtZ_w/exec'; // Replace with your Apps Script URL
+  private customOrderUrl = '';
+  constructor(private http: HttpClient) {}
 
   // submitOrder(order: any): Observable<any> {
   //   return this.http.post(this.scriptUrl, order);
@@ -19,27 +20,20 @@ export class OrderService {
       method: 'POST',
       mode: 'no-cors',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify(order)
+      body: JSON.stringify(order),
     });
   }
-
 
   submitCustomOrder(order: any) {
     return fetch(this.orderUrl, {
       method: 'POST',
       mode: 'no-cors',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify(order)
+      body: JSON.stringify(order),
     });
   }
-
-
-
-
-
-
 }

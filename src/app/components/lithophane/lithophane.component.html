@@ -1,0 +1,420 @@
+<div class="litho-page">
+  <!-- ══════════════════ HERO ══════════════════ -->
+  <section class="litho-hero">
+    <div class="hero-bg-glow"></div>
+    <div class="hero-content">
+      <span class="hero-badge">Nouveau ✦</span>
+      <h1>Porte-clés Personnalisés</h1>
+      <p>
+        Transformez vos plus belles photos en porte-clés uniques.<br />
+        Rétroéclairé, votre image prend vie dans chaque détail.
+      </p>
+      <button
+        class="hero-cta"
+        (click)="
+          uploadZone.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        "
+      >
+        Créer la mienne →
+      </button>
+    </div>
+    <div class="hero-preview-cards">
+      <div class="hero-card dark">
+        <div class="hero-card-label">Sans lumière</div>
+      </div>
+      <div class="hero-card lit">
+        <div class="hero-card-label">Avec lumière</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════ INFO STRIP ══════════════════ -->
+  <section class="info-strip">
+    <div class="info-item">
+      <span class="info-icon">🖼️</span>
+      <div>
+        <strong>N'importe quelle photo</strong>
+        <p>Portrait, paysage, souvenir</p>
+      </div>
+    </div>
+    <div class="info-item">
+      <span class="info-icon">🎨</span>
+      <div>
+        <strong>Personnalisez en direct</strong>
+        <p>Rotation, zoom, contraste</p>
+      </div>
+    </div>
+    <div class="info-item">
+      <span class="info-icon">💡</span>
+      <div>
+        <strong>Effet lumineux unique</strong>
+        <p>Idéale posée devant une fenêtre ou rétroéclairée</p>
+      </div>
+    </div>
+    <div class="info-item">
+      <span class="info-icon">🎁</span>
+      <div>
+        <strong>Cadeau mémorable</strong>
+        <p>Livré sous 3-5 jours ouvrés</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════ CONFIGURATOR ══════════════════ -->
+  <section class="litho-configurator" #uploadZone>
+    <div class="configurator-container">
+      <!-- ── STEP 1 : Upload ── -->
+      <div class="step-card" id="step-upload">
+        <div class="step-header">
+          <div class="step-badge">1</div>
+          <h2>Chargez votre photo</h2>
+        </div>
+
+        <div
+          class="upload-zone"
+          [class.drag-over]="isDragOver"
+          [class.has-image]="imageUrl"
+          (dragover)="onDragOver($event)"
+          (dragleave)="onDragLeave()"
+          (drop)="onDrop($event)"
+          (click)="!imageUrl && fileInput.click()"
+        >
+          <input
+            #fileInput
+            id="litho-file-input"
+            type="file"
+            accept="image/*"
+            (change)="onFileSelected($event)"
+            hidden
+          />
+
+          <!-- Empty state -->
+          <div class="upload-placeholder" *ngIf="!imageUrl">
+            <div class="upload-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+              >
+                <path
+                  d="M4 16l4-4a3 3 0 014.24 0L16 16m-2-2l1.59-1.59a3 3 0 014.24 0L20 14M14 8h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                />
+              </svg>
+            </div>
+            <p class="upload-title">Glissez votre image ici</p>
+            <span class="upload-sub"
+              >ou <strong>cliquez pour parcourir</strong></span
+            >
+            <div class="upload-formats">JPG · PNG · WEBP · max 15 Mo</div>
+          </div>
+
+          <!-- Preview -->
+          <div class="preview-wrapper" *ngIf="imageUrl">
+            <div
+              class="preview-frame"
+              [ngClass]="getShapeClass()"
+              #pf
+              (pointerdown)="onFramePointerDown($event, pf)"
+              (pointermove)="onFramePointerMove($event)"
+              (pointerup)="onFramePointerUp($event)"
+              (pointercancel)="onFramePointerUp($event)"
+              (wheel)="onFrameWheel($event)"
+            >
+              <img
+                [src]="imageUrl"
+                [style.transform]="getPreviewTransform()"
+                [style.filter]="getPreviewFilter()"
+                [style.transition]="isInteracting ? 'none' : null"
+                class="preview-img"
+                alt="Aperçu lithophane"
+              />
+            </div>
+            <div class="preview-actions">
+              <label
+                class="btn-secondary"
+                for="litho-file-input"
+                (click)="$event.stopPropagation(); clearImage()"
+              >
+                🗑 Supprimer l'image
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── STEP 2 : Shape selection ── -->
+      <div class="step-card" id="step-shape" *ngIf="imageUrl">
+        <div class="step-header">
+          <div class="step-badge">2</div>
+          <h2>Choisissez votre forme</h2>
+        </div>
+        <div class="shape-grid">
+          <div
+            class="shape-card"
+            *ngFor="let s of shapes"
+            [class.selected]="selectedShape === s.id"
+            (click)="selectedShape = s.id"
+          >
+            <div class="shape-icon-wrapper">
+              <div class="shape-icon" [ngClass]="'shape-icon--' + s.id"></div>
+            </div>
+            <div class="shape-name">{{ s.label }}</div>
+            <div class="shape-dim">{{ s.description }}</div>
+          </div>
+        </div>
+        <p class="price-note">Tous formats · <strong>20 DT</strong></p>
+      </div>
+
+      <!-- ── STEP 3 : Adjustments ── -->
+      <div class="step-card" id="step-adjust" *ngIf="imageUrl">
+        <div class="step-header">
+          <div class="step-badge">3</div>
+          <h2>Ajustez votre image</h2>
+        </div>
+
+        <div class="adjustments-layout">
+          <!-- Mini live preview -->
+          <div class="adj-preview">
+            <div
+              class="adj-frame"
+              [ngClass]="getShapeClass()"
+              #af
+              (pointerdown)="onFramePointerDown($event, af)"
+              (pointermove)="onFramePointerMove($event)"
+              (pointerup)="onFramePointerUp($event)"
+              (pointercancel)="onFramePointerUp($event)"
+              (wheel)="onFrameWheel($event)"
+            >
+              <img
+                [src]="imageUrl"
+                [style.transform]="getPreviewTransform()"
+                [style.filter]="getPreviewFilter()"
+                [style.transition]="isInteracting ? 'none' : null"
+                alt="Aperçu"
+              />
+            </div>
+            <p class="adj-hint">L'aperçu se met à jour en temps réel</p>
+          </div>
+
+          <!-- Controls -->
+          <div class="controls-grid">
+            <div class="control-group">
+              <div class="control-label">
+                <span>Rotation</span>
+                <span class="control-value">{{ adj.rotation }}°</span>
+              </div>
+              <div class="range-row">
+                <button
+                  class="icon-btn"
+                  (click)="adj.rotation = (+adj.rotation - 90 + 360) % 360"
+                  title="−90°"
+                >
+                  ↺
+                </button>
+                <input
+                  type="range"
+                  min="0"
+                  max="360"
+                  step="1"
+                  [(ngModel)]="adj.rotation"
+                />
+                <button
+                  class="icon-btn"
+                  (click)="adj.rotation = (+adj.rotation + 90) % 360"
+                  title="+90°"
+                >
+                  ↻
+                </button>
+              </div>
+            </div>
+
+            <div class="control-group">
+              <div class="control-label">
+                <span>Zoom</span>
+                <span class="control-value"
+                  >{{ (adj.scale * 100).toFixed(0) }}%</span
+                >
+              </div>
+              <input
+                type="range"
+                min="40"
+                max="220"
+                step="5"
+                [ngModel]="adj.scale * 100"
+                (ngModelChange)="adj.scale = $event / 100"
+              />
+              <span class="control-hint">
+                {{
+                  adj.scale < 0.98
+                    ? "← image entière visible"
+                    : adj.scale > 1.02
+                      ? "→ recadré, partie hors cadre"
+                      : "⬜ remplit exactement le cadre"
+                }}
+              </span>
+            </div>
+
+            <div class="control-group">
+              <div class="control-label">
+                <span>Position X</span>
+                <span class="control-value">{{ adj.translateX }}%</span>
+              </div>
+              <input
+                type="range"
+                min="-50"
+                max="50"
+                step="1"
+                [(ngModel)]="adj.translateX"
+              />
+            </div>
+
+            <div class="control-group">
+              <div class="control-label">
+                <span>Position Y</span>
+                <span class="control-value">{{ adj.translateY }}%</span>
+              </div>
+              <input
+                type="range"
+                min="-50"
+                max="50"
+                step="1"
+                [(ngModel)]="adj.translateY"
+              />
+            </div>
+
+            <div class="control-group">
+              <div class="control-label">
+                <span>Luminosité</span>
+                <span class="control-value">{{ adj.brightness }}%</span>
+              </div>
+              <input
+                type="range"
+                min="30"
+                max="200"
+                step="5"
+                [(ngModel)]="adj.brightness"
+              />
+            </div>
+
+            <div class="control-group">
+              <div class="control-label">
+                <span>Contraste</span>
+                <span class="control-value">{{ adj.contrast }}%</span>
+              </div>
+              <input
+                type="range"
+                min="60"
+                max="300"
+                step="5"
+                [(ngModel)]="adj.contrast"
+              />
+            </div>
+
+            <div class="control-group">
+              <div class="control-label"><span>Miroir</span></div>
+              <div class="toggle-row">
+                <button
+                  class="toggle-btn"
+                  [class.active]="adj.flipH"
+                  (click)="adj.flipH = !adj.flipH"
+                >
+                  ↔ Horizontal
+                </button>
+                <button
+                  class="toggle-btn"
+                  [class.active]="adj.flipV"
+                  (click)="adj.flipV = !adj.flipV"
+                >
+                  ↕ Vertical
+                </button>
+              </div>
+            </div>
+          </div>
+          <!-- /controls-grid -->
+        </div>
+        <!-- /adjustments-layout -->
+
+        <button class="btn-ghost reset-btn" (click)="resetAdjustments()">
+          ↺ Réinitialiser les ajustements
+        </button>
+      </div>
+
+      <!-- ── STEP 4 : Add to cart ── -->
+      <div class="step-card step-cart" *ngIf="imageUrl && selectedShape">
+        <div class="cart-summary">
+          <div class="cart-summary-info">
+            <span class="cart-item-name"
+              >Lithophane {{ selectedShapeLabel }} 4×4cm</span
+            >
+            <span class="cart-item-price">20 DT</span>
+          </div>
+          <button
+            class="btn-add-cart"
+            (click)="addToCart()"
+            [disabled]="isProcessing"
+          >
+            <span *ngIf="!isProcessing">🛒 Ajouter au panier</span>
+            <span *ngIf="isProcessing" class="loading-text">
+              <span class="spinner"></span> Traitement en cours…
+            </span>
+          </button>
+        </div>
+
+        <div class="success-banner" *ngIf="addedToCart">
+          ✓ Lithophane ajoutée au panier !
+        </div>
+
+        <p class="order-note">
+          💡 Lors de la commande, votre image traitée sera transmise à notre
+          équipe via Google Drive.
+        </p>
+      </div>
+    </div>
+    <!-- /configurator-container -->
+  </section>
+
+  <!-- ══════════════════ WHAT IS IT ══════════════════ -->
+  <section class="litho-about">
+    <div class="about-container">
+      <h2>Comment ça marche ?</h2>
+      <div class="steps-row">
+        <div class="how-step">
+          <div class="how-icon">📸</div>
+          <h3>1. Chargez votre photo</h3>
+          <p>
+            N'importe quelle image JPG ou PNG. Un bon contraste donnera un
+            meilleur résultat.
+          </p>
+        </div>
+        <div class="how-arrow">→</div>
+        <div class="how-step">
+          <div class="how-icon">🎛️</div>
+          <h3>2. Ajustez</h3>
+          <p>
+            Orientez, recadrez et optimisez le contraste directement dans le
+            navigateur.
+          </p>
+        </div>
+        <div class="how-arrow">→</div>
+        <div class="how-step">
+          <div class="how-icon">🖨️</div>
+          <h3>3. On imprime</h3>
+          <p>
+            Votre image est convertie en modèle 3D et imprimée avec précision en
+            PLA blanc.
+          </p>
+        </div>
+        <div class="how-arrow">→</div>
+        <div class="how-step">
+          <div class="how-icon">💡</div>
+          <h3>4. Posez et admirez</h3>
+          <p>
+            Devant une fenêtre ou avec un rétroéclairage LED, votre photo prend
+            vie en 3D.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
