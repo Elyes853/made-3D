@@ -1,22 +1,61 @@
 // ─── Variables ──────────────────────────────────────────────────────────────
-$bg-dark: #0a0a12;
-$bg-card: #12121e;
-$border: rgba(255, 255, 255, 0.08);
-$accent: #a78bfa; // soft violet
-$accent-lit: #f0c4fc; // lit-lithophane highlight
-$text-main: #e8e8f0;
-$text-muted: #8888a8;
+// $accent-lit, $radius, $bg-showcase etc. are compile-time constants shared by
+// both themes. The actual light/dark palette lives in CSS custom properties
+// below (.litho-page / .litho-page.dark-mode) since the theme flips at
+// runtime with the light switch — Sass variables can't react to that.
+$bg-showcase: #050508; // dark "photo backdrop" — deliberate, echoes the product shots
+$accent-lit: #f2a93c; // warm amber — represents the lamp being "on", same in both themes
 $radius: 16px;
 $radius-sm: 10px;
 $transition: 0.2s ease;
+$theme-transition: 0.6s ease; // the "power on/off" fade when the switch is toggled
 
-// ─── Page wrapper ───────────────────────────────────────────────────────────
+// The two showcase photos aren't cropped identically in the source files, so
+// the coin renders at slightly different sizes. Bump this to grow the
+// "sans lumière" shot until it visually matches "avec lumière" — try values
+// between 1.0 and 1.3. (Used below in .showcase-img--sans.)
+$sans-lumiere-scale: 1.15;
+
+// ─── Page wrapper & theme tokens ───────────────────────────────────────────
+// Default (light) theme — matches the site's monochrome black/white brand.
 .litho-page {
-  background: $bg-dark;
-  color: $text-main;
+  --bg: #ffffff;
+  --surface: #f7f7f7;
+  --surface-2: #f2f2f2;
+  --surface-3: #e8e8e8;
+  --border: #e6e6e6;
+  --text: #161616;
+  --text-rgb: 22, 22, 22;
+  --text-muted: #6f6f6f;
+  --accent: #111111;
+  --accent-rgb: 17, 17, 17;
+  --accent-contrast: #ffffff;
+  --accent-contrast-rgb: 255, 255, 255;
+
+  background: var(--bg);
+  color: var(--text);
   font-family: "Segoe UI", system-ui, sans-serif;
   min-height: 100vh;
   overflow-x: hidden;
+  transition:
+    background-color $theme-transition,
+    color $theme-transition;
+
+  // "Sans lumière" switches the whole page into dark mode — same lamp, same switch.
+  &.dark-mode {
+    --bg: #0b0b0f;
+    --surface: #17171d;
+    --surface-2: #1f1f26;
+    --surface-3: #2a2a33;
+    --border: #2c2c35;
+    --text: #f2f2f5;
+    --text-rgb: 242, 242, 245;
+    --text-muted: #9b9ba8;
+    --accent: #ffffff;
+    --accent-rgb: 255, 255, 255;
+    --accent-contrast: #111111;
+    --accent-contrast-rgb: 17, 17, 17;
+  }
 }
 
 // ─── HERO ────────────────────────────────────────────────────────────────────
@@ -36,15 +75,16 @@ $transition: 0.2s ease;
     background:
       radial-gradient(
         ellipse 60% 55% at 30% 40%,
-        rgba(167, 139, 250, 0.18) 0%,
+        rgba(var(--text-rgb), 0.03) 0%,
         transparent 70%
       ),
       radial-gradient(
         ellipse 40% 40% at 75% 60%,
-        rgba(240, 196, 252, 0.1) 0%,
+        rgba($accent-lit, 0.06) 0%,
         transparent 70%
       );
     pointer-events: none;
+    transition: background $theme-transition;
   }
 
   .hero-content {
@@ -56,12 +96,15 @@ $transition: 0.2s ease;
       display: inline-block;
       padding: 4px 14px;
       border-radius: 100px;
-      border: 1px solid rgba($accent, 0.5);
-      background: rgba($accent, 0.12);
-      color: $accent;
-      font-size: 0.8rem;
+      background: var(--accent);
+      color: var(--accent-contrast);
+      font-size: 0.78rem;
+      font-weight: 600;
       letter-spacing: 0.06em;
       margin-bottom: 1.2rem;
+      transition:
+        background $theme-transition,
+        color $theme-transition;
     }
 
     h1 {
@@ -69,23 +112,46 @@ $transition: 0.2s ease;
       font-weight: 700;
       line-height: 1.15;
       margin-bottom: 1rem;
-      background: linear-gradient(135deg, #fff 40%, $accent-lit 100%);
+      background: linear-gradient(
+        135deg,
+        var(--text) 45%,
+        var(--text-muted) 100%
+      );
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
+      transition: background $theme-transition;
     }
 
     p {
-      color: $text-muted;
+      color: var(--text-muted);
       font-size: 1.1rem;
       line-height: 1.7;
-      margin-bottom: 2rem;
+      margin-bottom: 1.4rem;
+      transition: color $theme-transition;
+    }
+
+    .hero-price {
+      display: flex;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-bottom: 1.8rem;
+
+      .price-old {
+        font-size: 1.1rem;
+      }
+
+      .price-new {
+        font-size: 1.9rem;
+        font-weight: 800;
+      }
     }
 
     .hero-cta {
       padding: 14px 32px;
-      background: linear-gradient(135deg, $accent, #c084fc);
-      color: #fff;
+      background: var(--accent);
+      color: var(--accent-contrast);
       border: none;
       border-radius: $radius;
       font-size: 1rem;
@@ -93,102 +159,327 @@ $transition: 0.2s ease;
       cursor: pointer;
       transition:
         opacity $transition,
-        transform $transition;
+        transform $transition,
+        background $theme-transition,
+        color $theme-transition;
 
       &:hover {
-        opacity: 0.88;
+        opacity: 0.85;
         transform: translateY(-2px);
       }
     }
   }
 
-  .hero-preview-cards {
+  // ── Showcase: real photo, switchable light ──
+  .hero-showcase {
     position: relative;
     z-index: 1;
     display: flex;
-    gap: 1.5rem;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.4rem;
     flex-shrink: 0;
+  }
 
-    .hero-card {
-      width: 150px;
-      height: 200px;
-      border-radius: $radius;
-      border: 1px solid $border;
+  .showcase-halo {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: min(420px, 90vw);
+    aspect-ratio: 1;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    background: radial-gradient(
+      circle,
+      rgba($accent-lit, 0.4) 0%,
+      rgba($accent-lit, 0.16) 45%,
+      transparent 72%
+    );
+    filter: blur(28px);
+    opacity: 0;
+    transition: opacity 0.8s ease;
+    pointer-events: none;
+    z-index: 0;
+
+    &.is-lit {
+      opacity: 1;
+      animation: halo-breathe 3.6s ease-in-out infinite;
+    }
+  }
+
+  // The photos are transparent cutouts (no backdrop) — the frame is just a
+  // positioning box, never painted, so the coin appears to float on the page.
+  .showcase-frame {
+    position: relative;
+    z-index: 1;
+    width: min(300px, 72vw);
+    aspect-ratio: 1;
+
+    .showcase-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      transform: scale(1.04);
+      filter: drop-shadow(0 18px 28px rgba(17, 17, 17, 0.18));
+      transition:
+        opacity 0.9s ease,
+        transform 1.4s ease;
+      will-change: opacity, transform;
+
+      &.visible {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      // Size-correction for the mismatched source crops — see
+      // $sans-lumiere-scale above.
+      &--sans {
+        transform: scale(#{$sans-lumiere-scale * 1.04});
+
+        &.visible {
+          transform: scale($sans-lumiere-scale);
+        }
+      }
+    }
+
+    // Diagonal light sweep, masked to the coin's own silhouette so it glints
+    // across the object itself rather than a box behind it.
+    .showcase-shine {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        100deg,
+        transparent 35%,
+        rgba(255, 255, 255, 0.85) 50%,
+        transparent 65%
+      );
+      background-size: 260% 260%;
+      background-position: -130% -130%;
+      -webkit-mask-repeat: no-repeat;
+      mask-repeat: no-repeat;
+      -webkit-mask-size: cover;
+      mask-size: cover;
+      -webkit-mask-position: center;
+      mask-position: center;
+      -webkit-mask-mode: alpha;
+      mask-mode: alpha;
+      animation: shine-sweep 0.9s ease forwards;
+      pointer-events: none;
+    }
+  }
+
+  .light-switch-wrapper {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .switch-hint {
+    position: absolute;
+    bottom: calc(100% + 10px);
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    background: var(--surface-1, #fff);
+    color: var(--text, #111);
+    border: 1px solid rgba($accent-lit, 0.4);
+    padding: 6px 12px;
+    border-radius: 100px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+    animation: hint-bounce 1.6s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 2;
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 6px solid transparent;
+      border-top-color: var(--surface-1, #fff);
+    }
+  }
+
+  .light-switch {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 100px;
+    -webkit-tap-highlight-color: transparent;
+
+    &.needs-attention {
+      animation: switch-attention-pulse 1.6s ease-in-out infinite;
+    }
+
+    .switch-track {
+      width: 58px;
+      height: 32px;
+      border-radius: 100px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
       display: flex;
-      align-items: flex-end;
-      padding: 10px;
-      position: relative;
-      overflow: hidden;
+      align-items: center;
+      padding: 3px;
+      transition:
+        background $transition,
+        border-color $transition,
+        background-color $theme-transition;
+    }
 
-      .hero-card-label {
-        font-size: 0.72rem;
-        letter-spacing: 0.04em;
-        color: $text-muted;
+    .switch-thumb {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #bdbdbd;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      transform: translateX(0);
+      transition:
+        transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+        background $transition;
+
+      svg {
+        width: 14px;
+        height: 14px;
       }
+    }
 
-      &.dark {
-        background: #1a1a28;
-        // Simulated dark lithophane texture
-        &::before {
-          content: "";
-          position: absolute;
-          inset: 0;
-          background: repeating-linear-gradient(
-            -45deg,
-            transparent,
-            transparent 3px,
-            rgba(255, 255, 255, 0.02) 3px,
-            rgba(255, 255, 255, 0.02) 6px
-          );
-        }
+    &.active {
+      .switch-track {
+        background: rgba($accent-lit, 0.16);
+        border-color: rgba($accent-lit, 0.5);
       }
-
-      &.lit {
-        background: linear-gradient(135deg, #f8edf9, #e8d4ee);
-        box-shadow: 0 0 40px rgba(240, 196, 252, 0.35);
-
-        .hero-card-label {
-          color: #888;
-        }
-
-        // Simulated portrait
-        &::before {
-          content: "";
-          position: absolute;
-          inset: 16px;
-          background: linear-gradient(
-            160deg,
-            rgba(0, 0, 0, 0.25),
-            rgba(0, 0, 0, 0.05) 50%,
-            rgba(0, 0, 0, 0.2)
-          );
-          border-radius: 8px;
-        }
+      .switch-thumb {
+        background: linear-gradient(
+          135deg,
+          lighten($accent-lit, 12%),
+          $accent-lit
+        );
+        color: #fff;
+        transform: translateX(26px);
+        box-shadow: 0 0 14px rgba($accent-lit, 0.55);
       }
+    }
+
+    .switch-caption {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      min-width: 110px;
+      transition:
+        color $transition,
+        color $theme-transition;
+    }
+
+    &.active .switch-caption {
+      color: darken($accent-lit, 12%);
+    }
+
+    &:hover .switch-track {
+      border-color: rgba($accent-lit, 0.4);
     }
   }
 
   @media (max-width: 768px) {
+    // Fit the whole hero inside one screen instead of spilling below the
+    // fold — dvh accounts for the mobile browser's address bar the way vh
+    // doesn't; vh is kept first as a fallback for browsers without dvh.
+    min-height: 100vh;
+    min-height: 100dvh;
     flex-direction: column;
-    align-items: flex-start;
-    padding: 5rem 5vw 3rem;
-    min-height: 70vh;
-    gap: 2rem;
+    align-items: center;
+    // Top-aligned, not centered — centering combined with the sticky navbar
+    // above it was what created the big gap before the first element.
+    justify-content: flex-start;
+    text-align: center;
+    padding: 1.25rem 6vw 2rem;
+    gap: 0.85rem;
 
-    .hero-preview-cards {
+    // Unwrap so the badge/title/price and the CTA can each get their own
+    // flex order alongside .hero-showcase — the CTA moves below the photos
+    // on mobile while staying inside .hero-content (and above the photos)
+    // on desktop.
+    .hero-content {
+      max-width: 100%;
+      display: contents;
+    }
+
+    // Dropped on mobile — the space it (and its margin) freed up went to
+    // the showcase photo, which is what actually sells the product here.
+    .hero-badge {
       display: none;
     }
-
     .hero-content h1 {
-      font-size: clamp(1.8rem, 7vw, 2.6rem);
+      order: 2;
+      margin-bottom: 0;
+      font-size: clamp(1.5rem, 6.5vw, 2.1rem);
     }
     .hero-content p {
-      font-size: 0.95rem;
+      order: 3;
+      margin-bottom: 0;
+      font-size: 1rem;
+      line-height: 1.45;
+    }
+    .hero-price {
+      order: 4;
+      margin-bottom: 0;
+
+      .price-old {
+        font-size: 0.95rem;
+      }
+      .price-new {
+        font-size: 1.5rem;
+      }
+    }
+    .hero-showcase {
+      order: 5;
+      margin: 0;
+      gap: 0.7rem;
+    }
+    .showcase-frame {
+      width: min(260px, 62vw);
+    }
+    .light-switch .switch-track {
+      width: 52px;
+      height: 28px;
+    }
+    .light-switch .switch-thumb {
+      width: 22px;
+      height: 22px;
+
+      svg {
+        width: 13px;
+        height: 13px;
+      }
+    }
+    .light-switch.active .switch-thumb {
+      transform: translateX(24px);
+    }
+    .light-switch .switch-caption {
+      font-size: 0.8rem;
+      min-width: 90px;
     }
     .hero-cta {
+      order: 6;
       width: 100%;
       text-align: center;
-      padding: 16px;
+      padding: 13px;
+      font-size: 0.92rem;
     }
   }
 }
@@ -197,53 +488,45 @@ $transition: 0.2s ease;
 .info-strip {
   display: flex;
   flex-wrap: wrap;
-  gap: 0;
-  border-top: 1px solid $border;
-  border-bottom: 1px solid $border;
+  justify-content: center;
+  align-items: center;
+  gap: 0.6rem 2.8rem;
+  padding: 1.8rem 6vw 2.2rem;
+  border-bottom: 1px solid var(--border);
+  transition: border-color $theme-transition;
 
   .info-item {
-    flex: 1 1 220px;
     display: flex;
     align-items: center;
-    gap: 1rem;
-    padding: 1.6rem 2rem;
-    border-right: 1px solid $border;
-
-    &:last-child {
-      border-right: none;
-    }
+    gap: 0.6rem;
+    color: var(--text-muted);
+    font-size: 0.88rem;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+    transition: color $theme-transition;
 
     .info-icon {
-      font-size: 1.8rem;
+      width: 18px;
+      height: 18px;
+      color: var(--accent);
       flex-shrink: 0;
+      transition: color $theme-transition;
     }
 
-    strong {
-      display: block;
-      font-size: 0.92rem;
-      color: $text-main;
-      margin-bottom: 3px;
-    }
-
-    p {
-      font-size: 0.8rem;
-      color: $text-muted;
-      margin: 0;
+    span {
+      color: var(--text);
+      font-weight: 500;
+      transition: color $theme-transition;
     }
   }
 
-  @media (max-width: 768px) {
-    .info-item {
-      flex: 1 1 50%;
-      border-right: none;
-      border-bottom: 1px solid $border;
-      padding: 1rem 1.2rem;
-    }
-  }
+  @media (max-width: 640px) {
+    flex-direction: column;
+    gap: 0.9rem;
+    padding: 0.5rem 6vw 2rem;
 
-  @media (max-width: 400px) {
     .info-item {
-      flex: 1 1 100%;
+      white-space: normal;
     }
   }
 }
@@ -271,18 +554,21 @@ $transition: 0.2s ease;
 
 // ─── STEP CARD ───────────────────────────────────────────────────────────────
 .step-card {
-  background: $bg-card;
-  border: 1px solid $border;
+  background: var(--surface);
+  border: 1px solid var(--border);
   border-radius: $radius;
   padding: 1.2rem 1rem;
-  transition: border-color $transition;
+  transition:
+    border-color $transition,
+    background-color $theme-transition,
+    border-color $theme-transition;
 
   @media (min-width: 600px) {
     padding: 2rem;
   }
 
   &:hover {
-    border-color: rgba($accent, 0.25);
+    border-color: rgba(var(--accent-rgb), 0.25);
   }
 
   .step-header {
@@ -295,30 +581,34 @@ $transition: 0.2s ease;
       width: 36px;
       height: 36px;
       border-radius: 50%;
-      background: linear-gradient(135deg, $accent, #c084fc);
-      color: #fff;
+      background: var(--accent);
+      color: var(--accent-contrast);
       font-weight: 700;
       font-size: 1rem;
       display: flex;
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
+      transition:
+        background $theme-transition,
+        color $theme-transition;
     }
 
     h2 {
       font-size: 1.25rem;
       font-weight: 600;
-      color: $text-main;
+      color: var(--text);
       margin: 0;
+      transition: color $theme-transition;
     }
   }
 }
 
 // ─── UPLOAD ZONE ─────────────────────────────────────────────────────────────
 .upload-zone {
-  border: 2px dashed rgba(255, 255, 255, 0.12);
+  border: 2px dashed rgba(var(--text-rgb), 0.15);
   border-radius: $radius;
-  background: rgba(255, 255, 255, 0.025);
+  background: rgba(var(--text-rgb), 0.015);
   min-height: 280px;
   display: flex;
   align-items: center;
@@ -326,22 +616,23 @@ $transition: 0.2s ease;
   cursor: pointer;
   transition:
     border-color $transition,
-    background $transition;
+    background $transition,
+    background-color $theme-transition;
   overflow: hidden;
 
   &:hover:not(.has-image) {
-    border-color: rgba($accent, 0.5);
-    background: rgba($accent, 0.05);
+    border-color: rgba(var(--accent-rgb), 0.5);
+    background: rgba(var(--accent-rgb), 0.05);
   }
 
   &.drag-over {
-    border-color: $accent;
-    background: rgba($accent, 0.1);
+    border-color: var(--accent);
+    background: rgba(var(--accent-rgb), 0.1);
   }
 
   &.has-image {
     cursor: default;
-    border-color: rgba($accent, 0.3);
+    border-color: rgba(var(--accent-rgb), 0.3);
   }
 
   .upload-placeholder {
@@ -352,7 +643,7 @@ $transition: 0.2s ease;
       width: 64px;
       height: 64px;
       margin: 0 auto 1.2rem;
-      color: $text-muted;
+      color: var(--text-muted);
 
       svg {
         width: 100%;
@@ -362,16 +653,16 @@ $transition: 0.2s ease;
 
     .upload-title {
       font-size: 1.1rem;
-      color: $text-main;
+      color: var(--text);
       margin-bottom: 0.4rem;
     }
 
     .upload-sub {
       font-size: 0.9rem;
-      color: $text-muted;
+      color: var(--text-muted);
 
       strong {
-        color: $accent;
+        color: var(--accent);
         text-decoration: underline;
       }
     }
@@ -379,8 +670,25 @@ $transition: 0.2s ease;
     .upload-formats {
       margin-top: 0.8rem;
       font-size: 0.75rem;
-      color: rgba($text-muted, 0.6);
+      color: var(--text-muted);
       letter-spacing: 0.04em;
+    }
+
+    .upload-error {
+      margin-top: 0.8rem;
+      font-size: 0.8rem;
+      color: var(--error, #d64545);
+    }
+
+    .upload-spinner {
+      display: inline-block;
+      width: 32px;
+      height: 32px;
+      margin: 0 auto 1rem;
+      border: 3px solid rgba(var(--text-rgb), 0.15);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
     }
   }
 
@@ -397,11 +705,11 @@ $transition: 0.2s ease;
       width: 4cm;
       height: 4cm;
       flex-shrink: 0;
-      background: #0d0d1a;
+      background: $bg-showcase;
       border-radius: $radius-sm;
       overflow: hidden;
       position: relative;
-      border: 1px solid $border;
+      border: 1px solid var(--border);
       touch-action: none;
       user-select: none;
       cursor: grab;
@@ -455,11 +763,11 @@ $transition: 0.2s ease;
     .adj-frame {
       width: 4cm;
       height: 4cm;
-      background: #0d0d1a;
+      background: $bg-showcase;
       border-radius: $radius-sm;
       overflow: hidden;
       position: relative;
-      border: 1px solid $border;
+      border: 1px solid var(--border);
       touch-action: none;
       user-select: none;
       cursor: grab;
@@ -487,7 +795,7 @@ $transition: 0.2s ease;
 
     .adj-hint {
       font-size: 0.72rem;
-      color: $text-muted;
+      color: var(--text-muted);
       text-align: center;
       margin-top: 0.6rem;
     }
@@ -515,11 +823,11 @@ $transition: 0.2s ease;
     justify-content: space-between;
     align-items: center;
     font-size: 0.82rem;
-    color: $text-muted;
+    color: var(--text-muted);
 
     .control-value {
       font-weight: 600;
-      color: $accent;
+      color: var(--accent);
       min-width: 42px;
       text-align: right;
     }
@@ -527,7 +835,7 @@ $transition: 0.2s ease;
 
   .control-hint {
     font-size: 0.7rem;
-    color: rgba($accent, 0.7);
+    color: var(--text-muted);
     margin-top: 2px;
   }
 
@@ -537,9 +845,10 @@ $transition: 0.2s ease;
     width: 100%;
     height: 4px;
     border-radius: 4px;
-    background: rgba(255, 255, 255, 0.1);
+    background: var(--surface-3);
     outline: none;
     cursor: pointer;
+    transition: background-color $theme-transition;
 
     &::-webkit-slider-thumb {
       -webkit-appearance: none;
@@ -547,9 +856,11 @@ $transition: 0.2s ease;
       width: 22px;
       height: 22px;
       border-radius: 50%;
-      background: $accent;
+      background: var(--accent);
       cursor: pointer;
-      transition: transform $transition;
+      transition:
+        transform $transition,
+        background-color $theme-transition;
 
       &:hover {
         transform: scale(1.2);
@@ -560,7 +871,7 @@ $transition: 0.2s ease;
       width: 22px;
       height: 22px;
       border-radius: 50%;
-      background: $accent;
+      background: var(--accent);
       border: none;
       cursor: pointer;
     }
@@ -576,9 +887,9 @@ $transition: 0.2s ease;
     }
 
     .icon-btn {
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid $border;
-      color: $text-main;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      color: var(--text);
       border-radius: 8px;
       width: 32px;
       height: 32px;
@@ -587,10 +898,13 @@ $transition: 0.2s ease;
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: background $transition;
+      transition:
+        background $transition,
+        background-color $theme-transition,
+        color $theme-transition;
 
       &:hover {
-        background: rgba($accent, 0.15);
+        background: rgba(var(--accent-rgb), 0.08);
       }
     }
   }
@@ -604,22 +918,22 @@ $transition: 0.2s ease;
     flex: 1;
     padding: 6px 10px;
     border-radius: 8px;
-    border: 1px solid $border;
-    background: rgba(255, 255, 255, 0.04);
-    color: $text-muted;
+    border: 1px solid var(--border);
+    background: var(--surface-2);
+    color: var(--text-muted);
     font-size: 0.8rem;
     cursor: pointer;
     transition: all $transition;
 
     &.active {
-      border-color: $accent;
-      background: rgba($accent, 0.15);
-      color: $accent;
+      border-color: var(--accent);
+      background: rgba(var(--accent-rgb), 0.08);
+      color: var(--accent);
       font-weight: 600;
     }
 
     &:hover:not(.active) {
-      background: rgba(255, 255, 255, 0.08);
+      background: var(--surface-3);
     }
   }
 }
@@ -640,25 +954,28 @@ $transition: 0.2s ease;
 }
 
 .shape-card {
-  background: rgba(255, 255, 255, 0.03);
-  border: 2px solid $border;
+  background: var(--surface);
+  border: 2px solid var(--border);
   border-radius: $radius;
   padding: 1.2rem 0.8rem;
   text-align: center;
   cursor: pointer;
-  transition: all $transition;
+  transition:
+    all $transition,
+    background-color $theme-transition,
+    border-color $theme-transition;
   -webkit-tap-highlight-color: transparent;
   user-select: none;
 
   &:hover {
-    border-color: rgba($accent, 0.4);
-    background: rgba($accent, 0.06);
+    border-color: rgba(var(--accent-rgb), 0.35);
+    background: var(--surface-2);
   }
 
   &.selected {
-    border-color: $accent;
-    background: rgba($accent, 0.12);
-    box-shadow: 0 0 24px rgba($accent, 0.18);
+    border-color: var(--accent);
+    background: var(--surface-3);
+    box-shadow: 0 6px 20px rgba(var(--accent-rgb), 0.12);
   }
 
   .shape-icon-wrapper {
@@ -672,13 +989,13 @@ $transition: 0.2s ease;
   .shape-name {
     font-size: 1rem;
     font-weight: 700;
-    color: $text-main;
+    color: var(--text);
     margin-bottom: 3px;
   }
 
   .shape-dim {
     font-size: 0.72rem;
-    color: $text-muted;
+    color: var(--text-muted);
     letter-spacing: 0.04em;
   }
 }
@@ -689,10 +1006,10 @@ $transition: 0.2s ease;
   height: 52px;
   background: linear-gradient(
     135deg,
-    rgba($accent, 0.5),
-    rgba($accent-lit, 0.4)
+    rgba(var(--accent-rgb), 0.85),
+    rgba(var(--accent-rgb), 0.55)
   );
-  border: 2px solid rgba($accent, 0.6);
+  border: 2px solid rgba(var(--accent-rgb), 0.7);
   transition: transform $transition;
 
   &--square {
@@ -705,7 +1022,7 @@ $transition: 0.2s ease;
 
   &--heart {
     border: none;
-    background: $accent;
+    background: var(--accent);
     clip-path: polygon(
       50% 30%,
       63% 19%,
@@ -765,12 +1082,23 @@ $transition: 0.2s ease;
   text-align: center;
   margin-top: 1rem;
   font-size: 0.85rem;
-  color: $text-muted;
+  color: var(--text-muted);
 
   strong {
-    color: $accent;
+    color: var(--accent);
     font-size: 1rem;
   }
+}
+
+.price-old {
+  text-decoration: line-through;
+  color: var(--text-muted);
+  opacity: 0.75;
+  margin: 0 0.4em;
+}
+
+.price-new {
+  color: var(--accent);
 }
 
 // ─── CART STEP ────────────────────────────────────────────────────────────────
@@ -789,13 +1117,23 @@ $transition: 0.2s ease;
       .cart-item-name {
         font-size: 1rem;
         font-weight: 600;
-        color: $text-main;
+        color: var(--text);
       }
 
       .cart-item-price {
-        font-size: 1.4rem;
-        font-weight: 700;
-        color: $accent;
+        display: flex;
+        align-items: baseline;
+        gap: 0.3rem;
+
+        .price-old {
+          font-size: 0.95rem;
+          margin: 0;
+        }
+
+        .price-new {
+          font-size: 1.4rem;
+          font-weight: 700;
+        }
       }
     }
   }
@@ -814,7 +1152,7 @@ $transition: 0.2s ease;
   .order-note {
     margin-top: 1rem;
     font-size: 0.8rem;
-    color: $text-muted;
+    color: var(--text-muted);
     line-height: 1.6;
   }
 }
@@ -822,8 +1160,8 @@ $transition: 0.2s ease;
 // ─── BUTTONS ─────────────────────────────────────────────────────────────────
 .btn-add-cart {
   padding: 14px 28px;
-  background: linear-gradient(135deg, $accent, #c084fc);
-  color: #fff;
+  background: var(--accent);
+  color: var(--accent-contrast);
   border: none;
   border-radius: $radius;
   font-size: 1rem;
@@ -831,7 +1169,9 @@ $transition: 0.2s ease;
   cursor: pointer;
   transition:
     opacity $transition,
-    transform $transition;
+    transform $transition,
+    background-color $theme-transition,
+    color $theme-transition;
   white-space: nowrap;
 
   &:hover:not(:disabled) {
@@ -854,8 +1194,8 @@ $transition: 0.2s ease;
     display: inline-block;
     width: 16px;
     height: 16px;
-    border: 2px solid rgba(255, 255, 255, 0.4);
-    border-top-color: #fff;
+    border: 2px solid rgba(var(--accent-contrast-rgb), 0.4);
+    border-top-color: var(--accent-contrast);
     border-radius: 50%;
     animation: spin 0.7s linear infinite;
   }
@@ -863,96 +1203,161 @@ $transition: 0.2s ease;
 
 .btn-secondary {
   padding: 8px 18px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid $border;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
   border-radius: $radius-sm;
-  color: $text-main;
+  color: var(--text);
   font-size: 0.85rem;
   cursor: pointer;
-  transition: background $transition;
+  transition:
+    background $transition,
+    background-color $theme-transition,
+    color $theme-transition;
 
   &:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: var(--surface-3);
   }
 }
 
 .btn-ghost {
   background: none;
-  border: 1px solid $border;
+  border: 1px solid var(--border);
   border-radius: $radius-sm;
-  color: $text-muted;
+  color: var(--text-muted);
   font-size: 0.82rem;
   padding: 7px 14px;
   cursor: pointer;
   transition: all $transition;
 
   &:hover {
-    border-color: rgba($accent, 0.4);
-    color: $accent;
+    border-color: rgba(var(--accent-rgb), 0.35);
+    color: var(--accent);
   }
 }
 
 // ─── HOW IT WORKS ────────────────────────────────────────────────────────────
 .litho-about {
-  padding: 5rem 8vw;
-  background: rgba(255, 255, 255, 0.02);
-  border-top: 1px solid $border;
+  padding: 5rem 6vw 6rem;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  transition:
+    background-color $theme-transition,
+    border-color $theme-transition;
 
   h2 {
     font-size: 1.8rem;
     font-weight: 700;
     text-align: center;
-    margin-bottom: 3rem;
-    background: linear-gradient(135deg, #fff, $accent-lit);
+    margin-bottom: 0.6rem;
+    background: linear-gradient(135deg, var(--text), var(--text-muted));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    transition: background $theme-transition;
+  }
+
+  .about-sub {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    margin-bottom: 3.2rem;
   }
 
   .about-container {
-    max-width: 960px;
+    max-width: 640px;
     margin: 0 auto;
   }
 
-  .steps-row {
+  .how-list {
     display: flex;
-    align-items: center;
-    gap: 1rem;
-    flex-wrap: wrap;
-    justify-content: center;
+    flex-direction: column;
   }
 
   .how-step {
-    flex: 1 1 180px;
-    max-width: 200px;
-    text-align: center;
+    display: flex;
+    gap: 1.2rem;
+    position: relative;
+    padding-bottom: 2.4rem;
 
-    .how-icon {
-      font-size: 2.2rem;
-      margin-bottom: 0.8rem;
-    }
+    &:last-child {
+      padding-bottom: 0;
 
-    h3 {
-      font-size: 0.92rem;
-      font-weight: 600;
-      color: $text-main;
-      margin-bottom: 0.4rem;
-    }
-
-    p {
-      font-size: 0.8rem;
-      color: $text-muted;
-      line-height: 1.6;
+      .how-marker::after {
+        display: none;
+      }
     }
   }
 
-  .how-arrow {
-    font-size: 1.5rem;
-    color: rgba($accent, 0.5);
+  .how-marker {
+    position: relative;
     flex-shrink: 0;
+    display: flex;
+    justify-content: center;
 
-    @media (max-width: 600px) {
-      display: none;
+    .how-num {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--accent-contrast);
+      background: var(--accent);
+      box-shadow: 0 0 0 4px rgba(var(--accent-rgb), 0.08);
+      flex-shrink: 0;
+      z-index: 1;
+      transition:
+        background-color $theme-transition,
+        color $theme-transition;
+    }
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 1px;
+      height: calc(100% - 32px);
+      background: linear-gradient(
+        to bottom,
+        rgba(var(--accent-rgb), 0.3),
+        rgba(var(--accent-rgb), 0.04)
+      );
+    }
+  }
+
+  .how-body {
+    padding-top: 0.4rem;
+
+    h3 {
+      font-size: 1.02rem;
+      font-weight: 600;
+      color: var(--text);
+      margin: 0 0 0.35rem;
+    }
+
+    p {
+      font-size: 0.86rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+      margin: 0;
+      max-width: 46ch;
+    }
+  }
+
+  @media (max-width: 600px) {
+    padding: 3.5rem 7vw 4rem;
+
+    h2 {
+      font-size: 1.5rem;
+    }
+
+    .about-sub {
+      margin-bottom: 2.4rem;
+      font-size: 0.88rem;
     }
   }
 }
@@ -961,5 +1366,46 @@ $transition: 0.2s ease;
 @keyframes spin {
   to {
     transform: rotate(360deg);
+  }
+}
+
+@keyframes halo-breathe {
+  0%,
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.85;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.08);
+    opacity: 1;
+  }
+}
+
+@keyframes shine-sweep {
+  from {
+    background-position: -130% -130%;
+  }
+  to {
+    background-position: 130% 130%;
+  }
+}
+
+@keyframes hint-bounce {
+  0%,
+  100% {
+    transform: translateX(-50%) translateY(0);
+  }
+  50% {
+    transform: translateX(-50%) translateY(-5px);
+  }
+}
+
+@keyframes switch-attention-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba($accent-lit, 0.35);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba($accent-lit, 0);
   }
 }

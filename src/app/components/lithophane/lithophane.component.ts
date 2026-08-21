@@ -33,12 +33,17 @@ export interface LithophaneShape {
 })
 export class LithophaneComponent {
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
+  readonly sansLumierePath = '/assets/images/lithophanes/sans_lumiere2.png';
+  readonly avecLumierePath = '/assets/images/lithophanes/avec_lumiere.png';
   imageUrl: string | null = null;
   isDragOver = false;
   isProcessing = false;
+  isLoadingImage = false;
+  loadError: string | null = null;
   addedToCart = false;
   selectedShape: ShapeType | null = null;
   readonly price = 20;
+  readonly originalPrice = 30;
   adj: LithophaneAdjustments = this.defaultAdj();
   readonly shapes: LithophaneShape[] = [
     { id: 'square', label: 'Carre', description: '4 x 4 cm' },
@@ -49,6 +54,19 @@ export class LithophaneComponent {
     private cartService: CartService,
     private lithophaneService: LithophaneService,
   ) {}
+  // ── Hero light-switch showcase ───────────────────────────────────────────
+  isLit = false;
+  showShine = false;
+  hasToggledLight = false;
+  private _shineTimeout: ReturnType<typeof setTimeout> | null = null;
+  toggleLit(): void {
+    this.isLit = !this.isLit;
+    this.hasToggledLight = true;
+    this.showShine = true;
+    if (this._shineTimeout) clearTimeout(this._shineTimeout);
+    this._shineTimeout = setTimeout(() => (this.showShine = false), 900);
+  }
+
   defaultAdj(): LithophaneAdjustments {
     return {
       rotation: 0,
@@ -210,6 +228,7 @@ export class LithophaneComponent {
     this.adj = this.defaultAdj();
     this.selectedShape = null;
     this.addedToCart = false;
+    this.loadError = null;
     this.fileInput.nativeElement.value = '';
   }
   get selectedShapeLabel(): string {
@@ -230,15 +249,70 @@ export class LithophaneComponent {
     event.preventDefault();
     this.isDragOver = false;
     const f = event.dataTransfer?.files[0];
-    if (f?.type.startsWith('image/')) this.loadFile(f);
+    if (f?.type.startsWith('image/') || this.isHeicFile(f!)) this.loadFile(f!);
   }
-  loadFile(file: File) {
-    const r = new FileReader();
-    r.onload = (e) => {
-      this.imageUrl = e.target?.result as string;
+
+  private isHeicFile(file: File): boolean {
+    const type = file.type.toLowerCase();
+    const name = file.name.toLowerCase();
+    return (
+      type === 'image/heic' ||
+      type === 'image/heif' ||
+      name.endsWith('.heic') ||
+      name.endsWith('.heif')
+    );
+  }
+
+  private readAsDataUrl(blob: Blob): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const r = new FileReader();
+      r.onload = () => resolve(r.result as string);
+      r.onerror = () => reject(r.error);
+      r.readAsDataURL(blob);
+    });
+  }
+
+  // Some browsers/OSes (mostly Apple's) can decode HEIC natively; when they
+  // can't, we convert it to JPEG ourselves instead of assuming by platform.
+  private canDecodeNatively(file: File): Promise<boolean> {
+    return new Promise((resolve) => {
+      const url = URL.createObjectURL(file);
+      const img = new Image();
+      img.onload = () => {
+        URL.revokeObjectURL(url);
+        resolve(img.naturalWidth > 0 && img.naturalHeight > 0);
+      };
+      img.onerror = () => {
+        URL.revokeObjectURL(url);
+        resolve(false);
+      };
+      img.src = url;
+    });
+  }
+
+  private async convertHeicToJpeg(file: File): Promise<Blob> {
+    const { heicTo } = await import('heic-to');
+    return heicTo({ blob: file, type: 'image/jpeg', quality: 0.85 });
+  }
+
+  async loadFile(file: File) {
+    this.isLoadingImage = true;
+    this.loadError = null;
+    try {
+      let workingBlob: Blob = file;
+      if (this.isHeicFile(file) && !(await this.canDecodeNatively(file))) {
+        workingBlob = await this.convertHeicToJpeg(file);
+      }
+      this.imageUrl = await this.readAsDataUrl(workingBlob);
       this.adj = this.defaultAdj();
-    };
-    r.readAsDataURL(file);
+      this.selectedShape = this.shapes[1].id;
+    } catch (err) {
+      console.error('Failed to load image', err);
+      this.loadError =
+        'Impossible de charger cette image. Essayez un autre fichier (JPG, PNG…).';
+    } finally {
+      this.isLoadingImage = false;
+    }
   }
   async addToCart() {
     if (!this.imageUrl || !this.selectedShape || this.isProcessing) return;
@@ -254,6 +328,8 @@ export class LithophaneComponent {
         ? crypto.randomUUID()
         : 'litho_' + Date.now() + '_' + Math.random().toString(36).slice(2);
       this.lithophaneService.storeImage(lithoId, processedUrl);
+      // Original, unprocessed color photo — kept as-is for reference.
+      this.lithophaneService.storeImage(lithoId + '_color', this.imageUrl);
       this.cartService.addToCart({
         id: Date.now(),
         name: 'Lithophane ' + shapeLabel + ' 4x4cm',

@@ -14,12 +14,29 @@ import {CartSidebarComponent} from "./components/cart-sidebar/cart-sidebar.compo
 export class AppComponent {
   isMenuOpen = false;
   cartCount = 0;
+  cartBump = false;
+
+  private cartBumpTimeout?: ReturnType<typeof setTimeout>;
 
   constructor(private cartService: CartService) {}
 
   ngOnInit() {
     this.cartService.cart$.subscribe((items) => {
-      this.cartCount = items.reduce((sum, item) => sum + item.quantity, 0);
+      const newCount = items.reduce((sum, item) => sum + item.quantity, 0);
+      if (newCount > this.cartCount) {
+        this.triggerCartBump();
+      }
+      this.cartCount = newCount;
+    });
+  }
+
+  private triggerCartBump() {
+    this.cartBump = false;
+    clearTimeout(this.cartBumpTimeout);
+    // restart the animation even if it's already mid-flight
+    requestAnimationFrame(() => {
+      this.cartBump = true;
+      this.cartBumpTimeout = setTimeout(() => (this.cartBump = false), 600);
     });
   }
 
