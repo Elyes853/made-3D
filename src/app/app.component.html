@@ -53,12 +53,12 @@
     </button>
     <button
       class="icon-btn cart-icon-btn"
+      [class.bump]="cartBump"
       (click)="cartSidebar.toggleSidebar()"
       aria-label="Cart"
     >
-      <img src="../assets/images/icons/shopIcon.svg" alt="Cart" />{{
-        cartCount
-      }}
+      <img src="../assets/images/icons/shopIcon.svg" alt="Cart" />
+      <span class="cart-count" [class.bump]="cartBump">{{ cartCount }}</span>
     </button>
   </div>
 

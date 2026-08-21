@@ -15,15 +15,18 @@ export class OrderService {
   //   return this.http.post(this.scriptUrl, order);
   // }
 
-  submitOrder(order: any) {
+  submitOrder(order: any): Promise<{ status: string; message?: string }> {
     return fetch(this.orderUrl, {
       method: 'POST',
-      mode: 'no-cors',
+      // Plain-text content type keeps this a "simple" request so the browser
+      // skips a CORS preflight (which the Apps Script endpoint can't answer).
+      // Apps Script's doPost still reads e.postData.contents and JSON.parses
+      // it itself, so the actual payload format is unaffected.
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'text/plain;charset=utf-8',
       },
       body: JSON.stringify(order),
-    });
+    }).then((res) => res.json());
   }
 
   submitCustomOrder(order: any) {

@@ -135,7 +135,7 @@ export class PlaceOrderComponent implements OnInit {
   /** Extracts the lithophane image and shape for a cart item (used in checkout payload) */
   private getLithophaneData(
     item: CartItem,
-  ): { imageBase64: string; shape: string } | null {
+  ): { imageBase64: string; colorImageBase64: string | null; shape: string } | null {
     if (!item.variant?.startsWith('litho:')) return null;
     // variant format: litho:<uuid>:<shape>
     const parts = item.variant.split(':');
@@ -143,7 +143,8 @@ export class PlaceOrderComponent implements OnInit {
     const shape = parts[2] ?? 'square';
     const imageBase64 = this.lithophaneService.getImage(id);
     if (!imageBase64) return null;
-    return { imageBase64, shape };
+    const colorImageBase64 = this.lithophaneService.getImage(id + '_color');
+    return { imageBase64, colorImageBase64, shape };
   }
 
   checkout() {
@@ -163,7 +164,7 @@ export class PlaceOrderComponent implements OnInit {
     // Collect lithophane images keyed by item name
     const lithophaneImages: Record<
       string,
-      { imageBase64: string; shape: string }
+      { imageBase64: string; colorImageBase64: string | null; shape: string }
     > = {};
     this.items.forEach((item) => {
       const data = this.getLithophaneData(item);
@@ -194,13 +195,18 @@ export class PlaceOrderComponent implements OnInit {
 
     this.orderService
       .submitOrder(orderPayload)
-      .then(() => {
+      .then((res) => {
         this.loading = false;
-        this.statusMessage = '✅ Order submitted successfully!';
-        this.cartService.clearCart();
-        this.items = [];
-        this.calculateTotal();
-        this.shippingForm.reset();
+        if (res.status === 'success') {
+          this.statusMessage = '✅ Order submitted successfully!';
+          this.cartService.clearCart();
+          this.items = [];
+          this.calculateTotal();
+          this.shippingForm.reset();
+        } else {
+          this.statusMessage =
+            '❌ ' + (res.message || 'Error submitting order');
+        }
       })
       .catch(() => {
         this.loading = false;
