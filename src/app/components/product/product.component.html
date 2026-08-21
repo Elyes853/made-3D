@@ -5,12 +5,12 @@
   <div class="image-wrap" (click)="viewDetails()">
     <!-- Base image -->
     <img class="layer base fade"
-         [src]="images?.[0]"
+         [src]="images[0]"
          [style.opacity]="hovered ? 0 : 1"
          (load)="onLoad(0)" />
 
     <!-- Alt image (only if provided) -->
-    <img *ngIf="images?.[1]"
+    <img *ngIf="images[1]"
          class="layer alt fade"
          [src]="images[1]"
          [style.opacity]="hovered && loaded[1] ? 1 : 0"
