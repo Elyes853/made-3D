@@ -1,6 +1,7 @@
 // src/app/services/cart.service.ts
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { PIXEL_CURRENCY, trackPixel } from './pixel';
 
 export interface CartItem {
   id: number;
@@ -64,6 +65,13 @@ export class CartService {
     }
 
     this.saveCart();
+    trackPixel('AddToCart', {
+      content_name: product.name,
+      content_ids: [String(product.id)],
+      content_type: 'product',
+      value: product.price,
+      currency: PIXEL_CURRENCY,
+    });
   }
 
   removeFromCart(productId: number, variant?: string) {

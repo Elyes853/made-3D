@@ -1,5 +1,7 @@
 import {Component, ElementRef, ViewChild} from '@angular/core';
-import {RouterLink, RouterOutlet} from '@angular/router';
+import {NavigationEnd, Router, RouterLink, RouterOutlet} from '@angular/router';
+import {filter, skip} from 'rxjs/operators';
+import {trackPixel} from './services/pixel';
 import {NgIf} from "@angular/common";
 import {CartService} from "./services/cart.service";
 import {CartSidebarComponent} from "./components/cart-sidebar/cart-sidebar.component";
@@ -18,7 +20,13 @@ export class AppComponent {
 
   private cartBumpTimeout?: ReturnType<typeof setTimeout>;
 
-  constructor(private cartService: CartService) {}
+  constructor(private cartService: CartService, router: Router) {
+    // The first PageView is sent by the pixel snippet in index.html;
+    // track the in-app navigations after it.
+    router.events
+      .pipe(filter((e) => e instanceof NavigationEnd), skip(1))
+      .subscribe(() => trackPixel('PageView'));
+  }
 
   ngOnInit() {
     this.cartService.cart$.subscribe((items) => {

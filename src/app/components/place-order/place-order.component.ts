@@ -11,6 +11,7 @@ import { CartItem, CartService } from '../../services/cart.service';
 import { OrderService } from '../../services/order.service';
 import { RouterLink } from '@angular/router';
 import { LithophaneService } from '../../services/lithophane.service';
+import { PIXEL_CURRENCY, trackPixel } from '../../services/pixel';
 
 @Component({
   selector: 'app-place-order',
@@ -50,6 +51,13 @@ export class PlaceOrderComponent implements OnInit {
   ) {
     this.items = this.cartService.getCart();
     this.calculateTotal();
+    if (this.items.length > 0) {
+      trackPixel('InitiateCheckout', {
+        value: this.total,
+        currency: PIXEL_CURRENCY,
+        num_items: this.items.reduce((sum, i) => sum + i.quantity, 0),
+      });
+    }
     this.shippingForm = this.fb.group({
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
@@ -199,6 +207,13 @@ export class PlaceOrderComponent implements OnInit {
         this.loading = false;
         if (res.status === 'success') {
           this.statusMessage = '✅ Order submitted successfully!';
+          trackPixel('Purchase', {
+            value: orderPayload.total,
+            currency: PIXEL_CURRENCY,
+            content_ids: this.items.map((i) => String(i.id)),
+            content_type: 'product',
+            num_items: this.items.reduce((sum, i) => sum + i.quantity, 0),
+          });
           this.cartService.clearCart();
           this.items = [];
           this.calculateTotal();
